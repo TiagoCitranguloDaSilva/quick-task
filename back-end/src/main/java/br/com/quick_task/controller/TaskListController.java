@@ -1,15 +1,13 @@
 package br.com.quick_task.controller;
 
-import br.com.quick_task.model.TaskList;
-import br.com.quick_task.model.User;
 import br.com.quick_task.request.TaskList.TaskListPostRequestBody;
 import br.com.quick_task.request.TaskList.TaskListPutRequestBody;
+import br.com.quick_task.response.TaskList.TaskListResponseBody;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,15 +16,13 @@ import java.util.List;
 public class TaskListController {
 
     @GetMapping
-    public ResponseEntity<List<TaskList>> getAllLists() {
+    public ResponseEntity<List<TaskListResponseBody>> getAllLists() {
 
-        TaskList list = TaskList.builder()
+        TaskListResponseBody list = TaskListResponseBody.builder()
                 .id(1L)
                 .title("mockList")
                 .description("mockListDescription")
-                .user(User.builder().build())
                 .tasks(new ArrayList<>())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.ok(List.of(list));
@@ -40,15 +36,13 @@ public class TaskListController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskList> getListById(@PathVariable Long id) {
+    public ResponseEntity<TaskListResponseBody> getListById(@PathVariable Long id) {
 
-        TaskList list = TaskList.builder()
+        TaskListResponseBody list = TaskListResponseBody.builder()
                 .id(id)
                 .title("mockList")
                 .description("mockListDescription")
-                .user(User.builder().build())
                 .tasks(new ArrayList<>())
-                .createdAt(LocalDateTime.now())
                 .build();
 
         return ResponseEntity.ok(list);
