@@ -2,6 +2,9 @@ package br.com.quick_task.controller;
 
 import br.com.quick_task.model.TaskList;
 import br.com.quick_task.model.User;
+import br.com.quick_task.request.TaskList.TaskListPostRequestBody;
+import br.com.quick_task.request.TaskList.TaskListPutRequestBody;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +33,7 @@ public class TaskListController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewList(TaskList list) {
+    public ResponseEntity<String> createNewList(@RequestBody @Valid TaskListPostRequestBody request) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body("List created");
 
@@ -51,8 +54,8 @@ public class TaskListController {
         return ResponseEntity.ok(list);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateList(TaskList taskList, @PathVariable Long id) {
+    @PutMapping("/edit")
+    public ResponseEntity<String> updateList(@RequestBody @Valid TaskListPutRequestBody request) {
 
         return ResponseEntity.ok("List updated");
 
