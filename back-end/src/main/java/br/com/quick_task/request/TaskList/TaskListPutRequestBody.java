@@ -1,5 +1,6 @@
 package br.com.quick_task.request.TaskList;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,11 +17,14 @@ public class TaskListPutRequestBody {
 
     @NotNull(message = "ID is required")
     @Min(value = 1L, message = "ID must be greater than 0")
+    @Schema(example = "1")
     private Long id;
 
     @NotBlank(message = "Title is required")
+    @Schema(example = "Home")
     private String title;
 
+    @Schema(nullable = true, example = "A list of all my chores")
     private String description;
 
 }
