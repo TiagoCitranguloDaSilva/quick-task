@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid AuthLoginRequestBody request) {
 
-        return ResponseEntity.ok("JTW Token Mock");
+        return ResponseEntity.ok("JWT Token Mock");
 
     }
 
