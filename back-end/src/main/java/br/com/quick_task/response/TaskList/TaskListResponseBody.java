@@ -1,6 +1,6 @@
 package br.com.quick_task.response.TaskList;
 
-import br.com.quick_task.model.Task;
+import br.com.quick_task.response.List.TaskResponseBody;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +17,6 @@ public class TaskListResponseBody {
     private Long id;
     private String title;
     private String description;
-    private List<Task> tasks;
+    private List<TaskResponseBody> tasks;
 
 }
