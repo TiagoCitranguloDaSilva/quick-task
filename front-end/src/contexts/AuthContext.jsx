@@ -22,12 +22,29 @@ function AuthProvider({ children }) {
     return;
   }
 
+  async function register({ username, email, password }) {
+    const response = await fetch("http://localhost:8080/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, email, password }),
+    });
+
+    // If response is an error, other than 200's codes
+    if (!response.ok) throw new Error("Register failed");
+
+    const token = await response.text();
+    setAccessToken(token);
+    return;
+  }
+
   function logout() {
     setAccessToken(null);
   }
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

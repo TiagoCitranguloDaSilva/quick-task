@@ -35,7 +35,7 @@ function Login() {
       email: user.email,
       password: user.password,
     });
-    navigate("/", { replace: true });
+    navigate("/");
   }
 
   function handleEmailInput(e) {
