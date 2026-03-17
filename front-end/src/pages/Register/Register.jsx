@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Register() {
   const { register } = useContext(AuthContext);
@@ -75,56 +75,62 @@ export default function Register() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          name="username"
-          id="username"
-          onChange={handleUsernameInput}
-          value={user.username}
-        />
-        {error.username == true ? <p>Your username should have at least 1 character</p> : null}
-      </div>
+    <>
+      <h1>Create an account</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            onChange={handleUsernameInput}
+            value={user.username}
+          />
+          {error.username == true ? <p>Username required</p> : null}
+        </div>
 
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          onChange={handleEmailInput}
-          value={user.email}
-        />
-        {error.email == true ? <p>Your email should have at least 1 character</p> : null}
-      </div>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            onChange={handleEmailInput}
+            value={user.email}
+          />
+          {error.email == true ? <p>Email required</p> : null}
+        </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={handlePasswordInput}
-          value={user.password}
-        />
-        {error.password == true ? <p>Your password should have at least 1 character</p> : null}
-      </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handlePasswordInput}
+            value={user.password}
+          />
+          {error.password == true ? <p>Password required</p> : null}
+        </div>
 
-      <div>
-        <label htmlFor="password_confirmation">Confirm password</label>
-        <input
-          type="password"
-          name="password_confirmation"
-          id="password_confirmation"
-          onChange={handlePasswordConfirmInput}
-          value={user.passwordConfirm}
-        />
-        {error.passwordConfirm == true ? <p>Your password should match</p> : null}
-      </div>
+        <div>
+          <label htmlFor="password_confirmation">Confirm password</label>
+          <input
+            type="password"
+            name="password_confirmation"
+            id="password_confirmation"
+            onChange={handlePasswordConfirmInput}
+            value={user.passwordConfirm}
+          />
+          {error.passwordConfirm == true ? <p>Passwords must match</p> : null}
+        </div>
 
-      <button>Sign up</button>
-    </form>
+        <button>Sign up</button>
+      </form>
+      <p>
+        Already have an account? <Link to="/login">Log in</Link>
+      </p>
+    </>
   );
 }

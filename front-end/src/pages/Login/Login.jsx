@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 function Login() {
   const { login } = useContext(AuthContext);
@@ -47,33 +47,39 @@ function Login() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          onChange={handleEmailInput}
-          value={user.email}
-        />
-        {error.email == true ? <p>Your email should have at least 1 character</p> : null}
-      </div>
+    <>
+      <h1>Log in</h1>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            onChange={handleEmailInput}
+            value={user.email}
+          />
+          {error.email == true ? <p>Email required</p> : null}
+        </div>
 
-      <div>
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          id="password"
-          onChange={handlePasswordInput}
-          value={user.password}
-        />
-        {error.password == true ? <p>Your password should have at least 1 character</p> : null}
-      </div>
+        <div>
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            onChange={handlePasswordInput}
+            value={user.password}
+          />
+          {error.password == true ? <p>Password required</p> : null}
+        </div>
 
-      <button>Log in</button>
-    </form>
+        <button>Log in</button>
+      </form>{" "}
+      <p>
+        Don't have an account? <Link to="/register">Sign up</Link>
+      </p>
+    </>
   );
 }
 
