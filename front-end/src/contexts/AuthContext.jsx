@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate, Navigate, Outlet } from "react-router";
 
 const AuthContext = createContext();
 
@@ -36,16 +36,6 @@ function AuthProvider({ children }) {
   useEffect(() => {
     // Get cookie
     const cookieToken = getCookie("token");
-
-    // If user is trying to access login an register pages AND User has a token in storage
-    if ((location.pathname == "/login" || location.pathname == "/register") && cookieToken) {
-      navigate("/");
-      return;
-    } else if (location.pathname != "/login" && location.pathname != "/register" && !cookieToken) {
-      // If user is trying to access other pages other than login an register AND User has no token in storage
-      navigate("/login");
-      return;
-    }
 
     // If the stored cookie token is the same as session token
     if (cookieToken !== accessToken) {
@@ -98,6 +88,18 @@ function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+// Route with auth required
+export function ProtectedRoute() {
+  // If has token -> Render the component ELSE Redirect
+  return getCookie("token") ? <Outlet /> : <Navigate to="/login" />;
+}
+
+// Route with auth not required, dont allow access to pages like login or register in this case
+export function PublicRoute() {
+  // If has token -> Redirect ELSE Render the component
+  return getCookie("token") ? <Navigate to="/" /> : <Outlet />;
 }
 
 export { AuthContext, AuthProvider };
