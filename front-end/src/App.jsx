@@ -3,21 +3,26 @@ import { AuthProvider, ProtectedRoute, PublicRoute } from "./contexts/AuthContex
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
+import Header from "./components/Header/Header";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+        <Header />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<Home />} />
-          </Route>
-        </Routes>
+        <main>
+          <Routes>
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
+            </Route>
+          </Routes>
+        </main>
       </AuthProvider>
     </BrowserRouter>
   );
