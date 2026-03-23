@@ -1,4 +1,47 @@
+a:not([data-no-default="true"]) {
+  color: hsl(208, 94%, 35%);
+}
+
+a[data-no-default="true"] {
+  text-decoration: none;
+}
+
 input,
 button {
   font-size: 1rem;
+}
+
+button,
+.button {
+  padding: 0.25em 0.5em;
+  background-color: hsl(208, 97%, 35%);
+  color: hsl(0, 0%, 100%);
+  border: none;
+  border-radius: 0.5em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(208, 88%, 41%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(208, 91%, 25%);
+  }
+}
+
+input,
+.input {
+  padding: 0.25em 0.5em;
+  background-color: hsl(210, 48%, 91%);
+  color: hsl(0, 0%, 0%);
+  border: solid 0.125em hsl(208, 97%, 35%);
+  border-radius: 0.5em;
+
+  &:hover {
+    background-color: hsl(209, 58%, 87%);
+  }
+
+  &:focus {
+    background-color: hsl(207, 33%, 95%);
+  }
 }
