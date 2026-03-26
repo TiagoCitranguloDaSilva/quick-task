@@ -59,7 +59,7 @@ function Login() {
             onChange={handleEmailInput}
             value={user.email}
           />
-          {error.email == true ? <p>Email required</p> : null}
+          {error.email == true ? <p className="error_message">Email required</p> : null}
         </div>
 
         <div>
@@ -71,7 +71,7 @@ function Login() {
             onChange={handlePasswordInput}
             value={user.password}
           />
-          {error.password == true ? <p>Password required</p> : null}
+          {error.password == true ? <p className="error_message">Password required</p> : null}
         </div>
 
         <button>Log in</button>

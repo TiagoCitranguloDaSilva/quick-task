@@ -87,7 +87,7 @@ export default function Register() {
             onChange={handleUsernameInput}
             value={user.username}
           />
-          {error.username == true ? <p>Username required</p> : null}
+          {error.username == true ? <p className="error_message">Username required</p> : null}
         </div>
 
         <div>
@@ -99,7 +99,7 @@ export default function Register() {
             onChange={handleEmailInput}
             value={user.email}
           />
-          {error.email == true ? <p>Email required</p> : null}
+          {error.email == true ? <p className="error_message">Email required</p> : null}
         </div>
 
         <div>
@@ -111,7 +111,7 @@ export default function Register() {
             onChange={handlePasswordInput}
             value={user.password}
           />
-          {error.password == true ? <p>Password required</p> : null}
+          {error.password == true ? <p className="error_message">Password required</p> : null}
         </div>
 
         <div>
@@ -123,7 +123,9 @@ export default function Register() {
             onChange={handlePasswordConfirmInput}
             value={user.passwordConfirm}
           />
-          {error.passwordConfirm == true ? <p>Passwords must match</p> : null}
+          {error.passwordConfirm == true ? (
+            <p className="error_message">Passwords must match</p>
+          ) : null}
         </div>
 
         <button>Sign up</button>

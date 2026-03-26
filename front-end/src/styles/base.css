@@ -32,3 +32,7 @@ img {
   outline: 0.25em solid var(--outline-color);
   outline-offset: 0.25em;
 }
+
+.error_message {
+  color: hsl(341, 100%, 37%);
+}
