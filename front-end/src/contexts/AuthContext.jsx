@@ -71,11 +71,41 @@ function AuthProvider({ children }) {
     });
 
     // If response is an error, other than 200's codes
-    if (!response.ok) throw new Error("Register failed");
+    if (!response.ok) {
+      if (response.status == 400) {
+        const content = await response.json();
+        console.log(content);
+
+        let userInvalid = [];
+
+        content.errors.forEach((error) => {
+          userInvalid.push({
+            field: error.field,
+            message: error.defaultMessage,
+          });
+        });
+
+        return {
+          success: false,
+          status: response.status,
+          invalids: userInvalid,
+        };
+      } else if (response.status == 409) {
+        const message = await response.text();
+
+        return {
+          success: false,
+          status: response.status,
+          message: message,
+        };
+      }
+
+      throw new Error("Register failed");
+    }
 
     const token = await response.text();
     setAccessToken(token);
-    return;
+    return { success: true };
   }
 
   function logout() {

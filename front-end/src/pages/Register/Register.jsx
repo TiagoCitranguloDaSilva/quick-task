@@ -1,15 +1,17 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
+import ErrorMessage from "../../components/Header/ErrorMessage";
 
 export default function Register() {
   const { register } = useContext(AuthContext);
   const [user, setUser] = useState({ username: "", email: "", password: "", passwordConfirm: "" });
   const [error, setError] = useState({
-    username: false,
-    email: false,
-    password: false,
+    username: { invalid: true, message: null },
+    email: { invalid: false, message: null },
+    password: { invalid: true, message: null },
     passwordConfirm: "",
+    userAlreadyExists: false,
   });
 
   const navigate = useNavigate();
@@ -27,15 +29,15 @@ export default function Register() {
     setError({ username: false, email: false, password: false, passwordConfirm: false });
 
     if (invalid.username) {
-      setError((prevError) => ({ ...prevError, username: true }));
+      setError((prevError) => ({ ...prevError, username: { invalid: true, message: null } }));
     }
 
     if (invalid.email) {
-      setError((prevError) => ({ ...prevError, email: true }));
+      setError((prevError) => ({ ...prevError, email: { invalid: true, message: null } }));
     }
 
     if (invalid.password) {
-      setError((prevError) => ({ ...prevError, password: true }));
+      setError((prevError) => ({ ...prevError, password: { invalid: true, message: null } }));
     }
 
     if (invalid.passwordConfirm) {
@@ -47,13 +49,31 @@ export default function Register() {
       return;
     }
 
-    console.log("will register");
-    await register({
+    let response = await register({
       username: user.username,
       email: user.email,
       password: user.password,
     });
-    console.log("will login");
+
+    // If unsuccessful
+    if (!response.success) {
+      // Validation error
+      if (response.status == 400) {
+        const updateInvalids = response.invalids.reduce((invalids, current) => {
+          invalids[current.field] = { invalid: true, message: current.message };
+          return invalids;
+        }, {});
+
+        setError((prevError) => ({ ...prevError, ...updateInvalids }));
+      }
+
+      // User exists
+      if (response.status == 409) {
+        setError((prevError) => ({ ...prevError, userAlreadyExists: true }));
+      }
+
+      return;
+    }
 
     navigate("/");
   }
@@ -87,7 +107,7 @@ export default function Register() {
             onChange={handleUsernameInput}
             value={user.username}
           />
-          {error.username == true ? <p className="error_message">Username required</p> : null}
+          <ErrorMessage error={error.username} defaultMessage="Username required" />
         </div>
 
         <div>
@@ -99,7 +119,7 @@ export default function Register() {
             onChange={handleEmailInput}
             value={user.email}
           />
-          {error.email == true ? <p className="error_message">Email required</p> : null}
+          <ErrorMessage error={error.email} defaultMessage="Email required" />
         </div>
 
         <div>
@@ -111,7 +131,7 @@ export default function Register() {
             onChange={handlePasswordInput}
             value={user.password}
           />
-          {error.password == true ? <p className="error_message">Password required</p> : null}
+          <ErrorMessage error={error.password} defaultMessage="Password required" />
         </div>
 
         <div>
@@ -123,10 +143,10 @@ export default function Register() {
             onChange={handlePasswordConfirmInput}
             value={user.passwordConfirm}
           />
-          {error.passwordConfirm == true ? (
-            <p className="error_message">Passwords must match</p>
-          ) : null}
+          <ErrorMessage error={error.passwordConfirm} message="Passwords must match" />
         </div>
+
+        <ErrorMessage error={error.userAlreadyExists} message="User already exists" />
 
         <button>Sign up</button>
       </form>
