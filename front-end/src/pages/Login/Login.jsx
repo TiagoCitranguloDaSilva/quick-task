@@ -2,10 +2,17 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 
+import styles from "./Login.module.css";
+import ErrorMessage from "../../components/ErrorMessage";
+
 function Login() {
   const { login } = useContext(AuthContext);
   const [user, setUser] = useState({ email: "", password: "" });
-  const [error, setError] = useState({ email: false, password: false });
+  const [error, setError] = useState({
+    email: { invalid: false, message: null },
+    password: { invalid: false, message: null },
+    incorrectCredentials: false,
+  });
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -16,14 +23,18 @@ function Login() {
       password: user.password.trim().length == 0,
     };
 
-    setError({ email: false, password: false });
+    setError({
+      email: { invalid: false, message: null },
+      password: { invalid: false, message: null },
+      incorrectCredentials: false,
+    });
 
     if (invalid.email) {
-      setError((prevError) => ({ ...prevError, email: true }));
+      setError((prevError) => ({ ...prevError, email: { invalid: true, message: null } }));
     }
 
     if (invalid.password) {
-      setError((prevError) => ({ ...prevError, password: true }));
+      setError((prevError) => ({ ...prevError, password: { invalid: true, message: null } }));
     }
 
     // At least one is invalid, don't try to fetch yet
@@ -31,10 +42,33 @@ function Login() {
       return;
     }
 
-    await login({
+    let response = await login({
       email: user.email,
       password: user.password,
     });
+
+    // If unsuccessful
+    if (!response.success) {
+      console.log(response);
+
+      // Validation error
+      if (response.status == 400) {
+        const updateInvalids = response.invalids.reduce((invalids, current) => {
+          invalids[current.field] = { invalid: true, message: current.message };
+          return invalids;
+        }, {});
+
+        setError((prevError) => ({ ...prevError, ...updateInvalids }));
+      }
+
+      //Incorrect credentials
+      if (response.status == 401) {
+        setError((prevError) => ({ ...prevError, incorrectCredentials: true }));
+      }
+
+      return;
+    }
+
     navigate("/");
   }
 
@@ -49,20 +83,20 @@ function Login() {
   return (
     <>
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <div className={styles.form_group}>
           <label htmlFor="email">Email</label>
           <input
-            type="email"
+            type="text"
             name="email"
             id="email"
             onChange={handleEmailInput}
             value={user.email}
           />
-          {error.email == true ? <p className="error_message">Email required</p> : null}
+          <ErrorMessage error={error.email} defaultMessage="Email required" />
         </div>
 
-        <div>
+        <div className={styles.form_group}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -71,8 +105,10 @@ function Login() {
             onChange={handlePasswordInput}
             value={user.password}
           />
-          {error.password == true ? <p className="error_message">Password required</p> : null}
+          <ErrorMessage error={error.password} defaultMessage="Password required" />
         </div>
+
+        <ErrorMessage error={error.incorrectCredentials} message="Incorrect credentials" />
 
         <button>Log in</button>
       </form>{" "}

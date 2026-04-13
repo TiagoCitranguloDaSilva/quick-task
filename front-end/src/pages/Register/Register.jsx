@@ -26,7 +26,13 @@ export default function Register() {
       passwordConfirm: user.password != user.passwordConfirm,
     };
 
-    setError({ username: false, email: false, password: false, passwordConfirm: false });
+    setError({
+      username: false,
+      email: false,
+      password: false,
+      passwordConfirm: false,
+      userAlreadyExists: false,
+    });
 
     if (invalid.username) {
       setError((prevError) => ({ ...prevError, username: { invalid: true, message: null } }));
