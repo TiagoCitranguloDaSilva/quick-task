@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
-import ErrorMessage from "../../components/Header/ErrorMessage";
+import ErrorMessage from "../../components/ErrorMessage";
 
 export default function Register() {
   const { register } = useContext(AuthContext);
