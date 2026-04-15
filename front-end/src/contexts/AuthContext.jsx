@@ -133,8 +133,6 @@ function AuthProvider({ children }) {
       throw new Error("Register failed");
     }
 
-    const token = await response.text();
-    setAccessToken(token);
     return { success: true };
   }
 

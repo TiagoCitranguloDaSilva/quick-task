@@ -49,8 +49,6 @@ function Login() {
 
     // If unsuccessful
     if (!response.success) {
-      console.log(response);
-
       // Validation error
       if (response.status == 400) {
         const updateInvalids = response.invalids.reduce((invalids, current) => {
