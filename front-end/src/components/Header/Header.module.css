@@ -17,18 +17,18 @@
 }
 
 .header_sub {
-  width: min(80em, 100%);
+  width: min(var(--breakout-max-width), 100%);
   margin-inline: auto;
 
   height: 4rem;
 
-  background-color: hsl(208, 87%, 97%);
+  background-color: hsl(206, 78%, 95%);
 
   gap: 1em;
   padding: 0.5em;
   border-radius: 0.5em;
 
-  transition: ease-out 0.25s;
+  transition: ease-out 0.4s box-shadow;
 }
 
 .header[data-scrolled="true"] .header_sub {
