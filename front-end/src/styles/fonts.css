@@ -1,0 +1,40 @@
+@font-face {
+  font-family: "Domine";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src:
+    local("Domine"),
+    url("/assets/fonts/dm-sans-variable-font.ttf") format("truetype");
+  /* 
+  font-variation-settings
+    "wght" 400 700
+  */
+}
+
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src:
+    local("DM Sans"),
+    url("/assets/fonts/domine-variable-font.ttf") format("truetype");
+  /* 
+  font-variation-settings
+    "opsz" 9 40
+    "wght" 100 1000
+  */
+}
+
+@property --font-wght {
+  syntax: "<number>";
+  initial-value: 400;
+  inherits: true;
+}
+
+@property --font-opsz {
+  syntax: "<number>";
+  initial-value: 9;
+  inherits: true;
+}

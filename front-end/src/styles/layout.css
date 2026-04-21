@@ -1,0 +1,71 @@
+#root {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 1em;
+  padding-bottom: 1em;
+
+  --padding-inline: 1rem;
+  --content-max-width: 100ch;
+  --breakout-max-width: 110ch;
+  --breakout-size: minmax(0, calc((var(--breakout-max-width) - var(--content-max-width)) / 2));
+}
+
+main {
+  display: grid;
+  grid-template-columns:
+    [full-width-start] minmax(var(--padding-inline), 1fr)
+    [breakout-start] var(--breakout-size)
+    [content-start] min(100% - (var(--padding-inline) * 2), var(--content-max-width)) [content-end]
+    var(--breakout-size) [breakout-end]
+    minmax(var(--padding-inline), 1fr) [full-width-end];
+  gap: 1rem 0;
+
+  align-content: start;
+}
+
+:is(main, .full_width) > :not(.breakout, .full_width) {
+  grid-column: content;
+}
+
+.breakout {
+  grid-column: breakout;
+}
+
+.full_width {
+  grid-column: full-width;
+
+  display: grid;
+  grid-template-columns: inherit;
+}
+
+.full_width.strech {
+  display: grid;
+  grid-template-columns: inherit;
+}
+
+.full_width.strech > * {
+  grid-column: full-width;
+}
+
+/* forms */
+.login_register {
+  width: min(40ch, 100%);
+  justify-self: center;
+
+  display: grid;
+  gap: 1rem 0;
+}
+
+.login_register > :is(h1, p) {
+  text-align: center;
+}
+
+.form {
+  display: grid;
+  gap: 0.75em;
+}
+
+.form_group {
+  display: grid;
+  gap: 0.25em;
+}
