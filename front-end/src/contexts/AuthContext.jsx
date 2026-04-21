@@ -157,7 +157,13 @@ export function ProtectedRoute() {
 // Route with auth not required, dont allow access to pages like login or register in this case
 export function PublicRoute() {
   // If has token -> Redirect ELSE Render the component
-  return getCookie("token") ? <Navigate to="/" /> : <Outlet />;
+  return getCookie("token") ? (
+    <Navigate to="/" />
+  ) : (
+    <div className="login_register">
+      <Outlet />
+    </div>
+  );
 }
 
 export { AuthContext, AuthProvider };

@@ -46,3 +46,26 @@ main {
 .full_width.strech > * {
   grid-column: full-width;
 }
+
+/* forms */
+.login_register {
+  width: min(40ch, 100%);
+  justify-self: center;
+
+  display: grid;
+  gap: 1rem 0;
+}
+
+.login_register > :is(h1, p) {
+  text-align: center;
+}
+
+.form {
+  display: grid;
+  gap: 0.75em;
+}
+
+.form_group {
+  display: grid;
+  gap: 0.25em;
+}

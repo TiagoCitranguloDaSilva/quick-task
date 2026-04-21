@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 
-import styles from "./Login.module.css";
 import ErrorMessage from "../../components/ErrorMessage";
 
 function Login() {
@@ -81,8 +80,8 @@ function Login() {
   return (
     <>
       <h1>Log in</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.form_group}>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form_group">
           <label htmlFor="email">Email</label>
           <input
             type="text"
@@ -94,7 +93,7 @@ function Login() {
           <ErrorMessage error={error.email} defaultMessage="Email required" />
         </div>
 
-        <div className={styles.form_group}>
+        <div className="form_group">
           <label htmlFor="password">Password</label>
           <input
             type="password"

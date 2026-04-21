@@ -7,9 +7,9 @@ export default function Register() {
   const { register } = useContext(AuthContext);
   const [user, setUser] = useState({ username: "", email: "", password: "", passwordConfirm: "" });
   const [error, setError] = useState({
-    username: { invalid: true, message: null },
+    username: { invalid: false, message: null },
     email: { invalid: false, message: null },
-    password: { invalid: true, message: null },
+    password: { invalid: false, message: null },
     passwordConfirm: "",
     userAlreadyExists: false,
   });
@@ -27,9 +27,9 @@ export default function Register() {
     };
 
     setError({
-      username: false,
-      email: false,
-      password: false,
+      username: { invalid: false, message: null },
+      email: { invalid: false, message: null },
+      password: { invalid: false, message: null },
       passwordConfirm: false,
       userAlreadyExists: false,
     });
@@ -103,8 +103,8 @@ export default function Register() {
   return (
     <>
       <h1>Create an account</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className="form">
+        <div className="form_group">
           <label htmlFor="username">Username</label>
           <input
             type="text"
@@ -116,7 +116,7 @@ export default function Register() {
           <ErrorMessage error={error.username} defaultMessage="Username required" />
         </div>
 
-        <div>
+        <div className="form_group">
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -128,7 +128,7 @@ export default function Register() {
           <ErrorMessage error={error.email} defaultMessage="Email required" />
         </div>
 
-        <div>
+        <div className="form_group">
           <label htmlFor="password">Password</label>
           <input
             type="password"
@@ -140,7 +140,7 @@ export default function Register() {
           <ErrorMessage error={error.password} defaultMessage="Password required" />
         </div>
 
-        <div>
+        <div className="form_group">
           <label htmlFor="password_confirmation">Confirm password</label>
           <input
             type="password"
