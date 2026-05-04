@@ -3,11 +3,7 @@
   margin: 0;
   padding: 0;
   color: var(--text-color);
-  font-family: Domine, sans-serif;
-
-  font-variation-settings:
-    "wght" var(--font-wght),
-    "wdth" var(--font-wdth);
+  font-family: "DM Sans", sans-serif;
 }
 
 h1,
@@ -16,7 +12,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "DM Sans", serif;
+  font-family: Domine, serif;
 }
 
 html,
