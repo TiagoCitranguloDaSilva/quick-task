@@ -1,0 +1,37 @@
+.list {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: end;
+  gap: 0.5em;
+  padding: 1em;
+  border-radius: 1em;
+
+  border: 0.125em solid hsl(212, 74%, 88%);
+  background-color: hsl(213, 65%, 97%);
+  box-shadow: 0.125em 0.125em 0.5em hsla(212, 76%, 20%, 0.3);
+}
+
+.list_tittle {
+  font-family: "Domine";
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.list_items {
+  border-top: 0.125em solid hsl(212, 74%, 88%);
+  padding-top: 0.5em;
+  display: grid;
+  gap: 0.25em;
+}
+
+.list_item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5em;
+}
+
+.list_item input:checkbox {
+}
+
+.list_item span {
+}

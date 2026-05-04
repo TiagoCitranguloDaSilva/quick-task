@@ -1,0 +1,5 @@
+.home {
+  display: grid;
+  gap: 0.5em;
+  grid-template-columns: repeat(auto-fill, minmax(min(36ch, 100%), 1fr));
+}
