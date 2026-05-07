@@ -1,0 +1,21 @@
+.error {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 0.5em;
+}
+
+.error h1 {
+  font-size: 3rem;
+  text-shadow: 0.0625em 0.0625em 0 hsl(0, 0%, 88%);
+}
+
+.error_title {
+  color: hsl(0, 0%, 5%);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.error_description {
+  color: hsl(0, 0%, 15%);
+}

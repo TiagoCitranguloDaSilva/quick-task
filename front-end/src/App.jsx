@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Home from "./pages/Home/Home";
 import Header from "./components/Header/Header";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Home />} />
             </Route>
+
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
       </AuthProvider>
