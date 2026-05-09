@@ -62,9 +62,9 @@ export default function Home() {
   if (!data) return <Loading />;
 
   return (
-    <div className={`${styles.home} breakout`} key="loaded_lists">
+    <div className={`${styles.home} breakout`}>
       {data.map((list) => (
-        <List list={list} />
+        <List list={list} key={list.id} />
       ))}
     </div>
   );

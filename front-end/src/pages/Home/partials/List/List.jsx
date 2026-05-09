@@ -8,12 +8,7 @@ export default function List({ list }) {
   const listTasksLimited = list.tasks.slice(0, 4);
 
   return (
-    <Link
-      to={`/list/${list.id}`}
-      key={`list_${list.id}`}
-      className={styles.list}
-      data-no-default="true"
-    >
+    <Link to={`/list/${list.id}`} className={styles.list} data-no-default="true">
       <p className={styles.list_tittle}>{list.title}</p>
       <p className={styles.list_description}>{list.description}</p>
 
