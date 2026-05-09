@@ -3,6 +3,8 @@ import styles from "./NotFoundPage.module.css";
 export default function NotFoundPage({ info }) {
   return (
     <div className={styles.error}>
+      <img src="/assets/images/NotFound.svg" alt="" />
+
       <h1>404</h1>
       {info ? (
         <>
