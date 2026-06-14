@@ -1,5 +1,6 @@
 package br.com.quick_task.controller;
 
+import br.com.quick_task.model.User;
 import br.com.quick_task.request.Task.TaskPostRequestBody;
 import br.com.quick_task.request.Task.TaskPutRequestBody;
 import br.com.quick_task.response.Task.TaskResponseBody;
@@ -7,6 +8,7 @@ import br.com.quick_task.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -22,9 +24,9 @@ public class TaskController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewTask(@RequestBody @Valid TaskPostRequestBody request) {
+    public ResponseEntity<String> createNewTask(@RequestBody @Valid TaskPostRequestBody request, @AuthenticationPrincipal User user) {
 
-        Optional<TaskResponseBody> response = taskService.createTask(request);
+        Optional<TaskResponseBody> response = taskService.createTask(request, user.getId());
 
         if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
 
@@ -32,9 +34,9 @@ public class TaskController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> updateTask(@RequestBody @Valid TaskPutRequestBody request) {
+    public ResponseEntity<String> updateTask(@RequestBody @Valid TaskPutRequestBody request, @AuthenticationPrincipal User user) {
 
-        Optional<TaskResponseBody> response = taskService.updateTask(request);
+        Optional<TaskResponseBody> response = taskService.updateTask(request, user.getId());
 
         if (response.isEmpty()) return ResponseEntity.notFound().build();
 
@@ -42,9 +44,9 @@ public class TaskController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteTask(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTask(@PathVariable Long id, @AuthenticationPrincipal User user) {
 
-        Optional<Long> response = taskService.deleteTask(id);
+        Optional<Long> response = taskService.deleteTask(id, user.getId());
 
         if (response.isEmpty()) return ResponseEntity.notFound().build();
 
