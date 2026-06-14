@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/task")
 public class TaskController {
@@ -26,9 +24,7 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<String> createNewTask(@RequestBody @Valid TaskPostRequestBody request, @AuthenticationPrincipal User user) {
 
-        Optional<TaskResponseBody> response = taskService.createTask(request, user.getId());
-
-        if (response.isEmpty()) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("List not found");
+        TaskResponseBody response = taskService.createTask(request, user.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Task created");
     }
@@ -36,9 +32,7 @@ public class TaskController {
     @PutMapping("/edit")
     public ResponseEntity<String> updateTask(@RequestBody @Valid TaskPutRequestBody request, @AuthenticationPrincipal User user) {
 
-        Optional<TaskResponseBody> response = taskService.updateTask(request, user.getId());
-
-        if (response.isEmpty()) return ResponseEntity.notFound().build();
+        TaskResponseBody response = taskService.updateTask(request, user.getId());
 
         return ResponseEntity.ok("Task updated");
     }
@@ -46,9 +40,9 @@ public class TaskController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteTask(@PathVariable Long id, @AuthenticationPrincipal User user) {
 
-        Optional<Long> response = taskService.deleteTask(id, user.getId());
+        taskService.deleteTask(id, user.getId());
 
-        if (response.isEmpty()) return ResponseEntity.notFound().build();
+//        if (response.isEmpty()) return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok("Task deleted");
     }

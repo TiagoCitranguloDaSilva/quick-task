@@ -1,5 +1,9 @@
 package br.com.quick_task.service;
 
+import br.com.quick_task.exception.NotOwnerException;
+import br.com.quick_task.exception.TaskListNotFoundException;
+import br.com.quick_task.exception.TaskNotFoundException;
+import br.com.quick_task.exception.UserNotFoundException;
 import br.com.quick_task.model.Task;
 import br.com.quick_task.model.TaskList;
 import br.com.quick_task.model.User;
@@ -10,8 +14,6 @@ import br.com.quick_task.request.Task.TaskPostRequestBody;
 import br.com.quick_task.request.Task.TaskPutRequestBody;
 import br.com.quick_task.response.Task.TaskResponseBody;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -26,71 +28,63 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    public Optional<TaskResponseBody> createTask(TaskPostRequestBody request, Long userId) {
+    public TaskResponseBody createTask(TaskPostRequestBody request, Long userId) {
 
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty()) return Optional.empty();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        Optional<TaskList> list = taskListRepository.findById(request.getListId());
-        if (list.isEmpty()) return Optional.empty();
+        TaskList list = taskListRepository.findById(request.getListId())
+                .orElseThrow(() -> new TaskListNotFoundException(request.getListId()));
 
-        if (!list.get().getUser().equals(userOpt.get())) return Optional.empty();
+        if (!list.getUser().equals(user))
+            throw new NotOwnerException(list);
 
         Task task = Task.builder()
                 .content(request.getContent())
-                .list(list.get())
+                .list(list)
                 .build();
 
-        return Optional.of(convertToDTO(taskRepository.save(task)));
+        return convertToDTO(taskRepository.save(task));
 
     }
 
-    public Optional<TaskResponseBody> updateTask(TaskPutRequestBody request, Long userId) {
+    public TaskResponseBody updateTask(TaskPutRequestBody request, Long userId) {
 
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty()) return Optional.empty();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        Optional<Task> taskOpt = taskRepository.findById(request.getId());
+        Task task = taskRepository.findById(request.getId())
+                .orElseThrow(() -> new TaskNotFoundException(request.getId()));
 
-        if (taskOpt.isEmpty()) return Optional.empty();
+        TaskList taskList = taskListRepository.findById(request.getListId())
+                .orElseThrow(() -> new TaskListNotFoundException(request.getListId()));
 
-        Optional<TaskList> taskListOpt = taskListRepository.findById(request.getListId());
-
-        if (taskListOpt.isEmpty()) return Optional.empty();
-
-        if (!taskListOpt.get().getUser().equals(userOpt.get())) return Optional.empty();
-
-        Task task = taskOpt.get();
+        if (!taskList.getUser().equals(user))
+            throw new NotOwnerException(task);
 
         task.setContent(request.getContent());
-        task.setList(taskListOpt.get());
+        task.setList(taskList);
 
-        return Optional.of(convertToDTO(taskRepository.save(task)));
+        return convertToDTO(taskRepository.save(task));
 
     }
 
-    public Optional<Long> deleteTask(Long id, Long userId) {
+    public void deleteTask(Long id, Long userId) {
 
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isEmpty()) return Optional.empty();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        Optional<Task> taskOpt = taskRepository.findById(id);
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
 
-        if (taskOpt.isEmpty()) return Optional.empty();
+        TaskList taskList = taskListRepository.findById(task.getList().getId())
+                .orElseThrow(() -> new TaskNotFoundException(task.getList().getId()));
 
-        Optional<TaskList> taskListOpt = taskListRepository.findById(taskOpt.get().getList().getId());
-        if (taskListOpt.isEmpty()) return Optional.empty();
-
-        if (!taskListOpt.get().getUser().equals(userOpt.get())) return Optional.empty();
-
-        Task task = taskOpt.get();
-
-        TaskList taskList = taskListOpt.get();
+        if (!taskList.getUser().equals(user))
+            throw new NotOwnerException(task);
 
         taskList.getTasks().remove(task);
-
         taskRepository.delete(task);
-        return Optional.of(task.getId());
 
     }
 
