@@ -20,11 +20,6 @@ public class TaskListPutRequestBody {
     @Schema(example = "1")
     private Long id;
 
-    // It's temporary
-    @NotNull(message = "User id is required")
-    @Schema(example = "1L")
-    private Long userId;
-
     @NotBlank(message = "Title is required")
     @Schema(example = "Home")
     private String title;

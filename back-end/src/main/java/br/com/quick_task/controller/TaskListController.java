@@ -1,5 +1,6 @@
 package br.com.quick_task.controller;
 
+import br.com.quick_task.model.User;
 import br.com.quick_task.request.TaskList.TaskListPostRequestBody;
 import br.com.quick_task.request.TaskList.TaskListPutRequestBody;
 import br.com.quick_task.response.TaskList.TaskListResponseBody;
@@ -7,6 +8,7 @@ import br.com.quick_task.service.TaskListService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,14 +23,15 @@ public class TaskListController {
         this.taskListService = taskListService;
     }
 
-    @GetMapping("/all/{id}")
-    public ResponseEntity<List<TaskListResponseBody>> getAllLists(@PathVariable Long id) {
-        return ResponseEntity.ok(taskListService.findAllLists(id));
+    @GetMapping("/all")
+    public ResponseEntity<List<TaskListResponseBody>> getAllLists(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(taskListService.findAllLists(user.getId()));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createNewList(@RequestBody @Valid TaskListPostRequestBody request) {
-        TaskListResponseBody taskList = taskListService.createList(request);
+    public ResponseEntity<String> createNewList(@RequestBody @Valid TaskListPostRequestBody request, @AuthenticationPrincipal User user) {
+
+        TaskListResponseBody taskList = taskListService.createList(request, user.getId());
 
         if (taskList == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
@@ -37,10 +40,10 @@ public class TaskListController {
 
     }
 
-    @GetMapping("/{id}/{userId}")
-    public ResponseEntity<TaskListResponseBody> getListById(@PathVariable Long id, @PathVariable Long userId) {
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskListResponseBody> getListById(@PathVariable Long id, @AuthenticationPrincipal User user) {
 
-        TaskListResponseBody list = taskListService.findById(id, userId);
+        TaskListResponseBody list = taskListService.findById(id, user.getId());
 
         if (list == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -50,9 +53,9 @@ public class TaskListController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<String> updateList(@RequestBody @Valid TaskListPutRequestBody request) {
+    public ResponseEntity<String> updateList(@RequestBody @Valid TaskListPutRequestBody request, @AuthenticationPrincipal User user) {
 
-        TaskListResponseBody list = taskListService.update(request);
+        TaskListResponseBody list = taskListService.update(request, user.getId());
 
         if (list == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something went wrong");
@@ -62,10 +65,10 @@ public class TaskListController {
 
     }
 
-    @DeleteMapping("/delete/{id}/{userId}")
-    public ResponseEntity<String> deleteList(@PathVariable Long id, @PathVariable Long userId) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteList(@PathVariable Long id, @AuthenticationPrincipal User user) {
 
-        taskListService.delete(id, userId);
+        taskListService.delete(id, user.getId());
 
         return ResponseEntity.ok("List deleted");
 

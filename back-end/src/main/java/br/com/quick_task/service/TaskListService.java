@@ -37,9 +37,9 @@ public class TaskListService {
         return list;
     }
 
-    public TaskListResponseBody createList(TaskListPostRequestBody request) {
+    public TaskListResponseBody createList(TaskListPostRequestBody request, Long userId) {
 
-        Optional<User> user = userRepository.findById(request.getUserId());
+        Optional<User> user = userRepository.findById(userId);
 
         if (user.isEmpty()) {
             return null;
@@ -73,7 +73,7 @@ public class TaskListService {
 
     }
 
-    public TaskListResponseBody update(TaskListPutRequestBody request) {
+    public TaskListResponseBody update(TaskListPutRequestBody request, Long userId) {
 
         Optional<TaskList> list = taskListRepository.findById(request.getId());
 
@@ -81,7 +81,7 @@ public class TaskListService {
             return null;
         }
 
-        if (!list.get().getUser().getId().equals(request.getUserId())) {
+        if (!list.get().getUser().getId().equals(userId)) {
             return null;
         }
 
