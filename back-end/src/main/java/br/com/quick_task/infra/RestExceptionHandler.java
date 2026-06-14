@@ -1,8 +1,6 @@
 package br.com.quick_task.infra;
 
-import br.com.quick_task.exception.TaskListNotFoundException;
-import br.com.quick_task.exception.TaskNotFoundException;
-import br.com.quick_task.exception.UserNotFoundException;
+import br.com.quick_task.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,6 +26,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<RestErrorMessage> taskNotFoundExceptionHandler(RuntimeException exception) {
         RestErrorMessage response = new RestErrorMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    private ResponseEntity<RestErrorMessage> userAlreadyExistsExceptionHandler(RuntimeException exception) {
+        RestErrorMessage response = new RestErrorMessage(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    private ResponseEntity<RestErrorMessage> invalidCredentialsExceptionHandler(RuntimeException exception) {
+        RestErrorMessage response = new RestErrorMessage(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
 }

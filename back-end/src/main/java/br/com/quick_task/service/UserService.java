@@ -1,5 +1,6 @@
 package br.com.quick_task.service;
 
+import br.com.quick_task.exception.UserAlreadyExistsException;
 import br.com.quick_task.model.User;
 import br.com.quick_task.repository.UserRepository;
 import br.com.quick_task.request.Auth.AuthRegisterRequestBody;
@@ -20,9 +21,8 @@ public class UserService {
 
     public User createNewUser(AuthRegisterRequestBody request) {
 
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return null;
-        }
+        if (userRepository.findByEmail(request.getEmail()).isPresent())
+            throw new UserAlreadyExistsException();
 
         User user = User.builder()
                 .email(request.getEmail())

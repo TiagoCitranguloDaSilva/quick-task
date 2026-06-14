@@ -1,5 +1,6 @@
 package br.com.quick_task.controller;
 
+import br.com.quick_task.exception.InvalidCredentialsException;
 import br.com.quick_task.model.User;
 import br.com.quick_task.request.Auth.AuthLoginRequestBody;
 import br.com.quick_task.request.Auth.AuthRegisterRequestBody;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,10 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> createNewUser(@RequestBody @Valid AuthRegisterRequestBody request) {
-        User user = userService.createNewUser(request);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
-        }
+        userService.createNewUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User created");
 
@@ -51,13 +50,13 @@ public class AuthController {
                 request.getPassword()
         );
 
-        Authentication auth = authenticationManager.authenticate(usernamePassword);
-
-        if (auth.getPrincipal() == null) return null;
-
-        String token = tokenService.generateToken((User) auth.getPrincipal());
-
-        return ResponseEntity.ok("Bearer " + token);
+        try {
+            Authentication auth = authenticationManager.authenticate(usernamePassword);
+            String token = tokenService.generateToken((User) auth.getPrincipal());
+            return ResponseEntity.ok("Bearer " + token);
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException();
+        }
 
     }
 
