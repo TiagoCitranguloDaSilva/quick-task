@@ -1,4 +1,4 @@
-package br.com.quick_task.response.List;
+package br.com.quick_task.response.Task;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

@@ -6,7 +6,7 @@ import br.com.quick_task.repository.TaskListRepository;
 import br.com.quick_task.repository.UserRepository;
 import br.com.quick_task.request.TaskList.TaskListPostRequestBody;
 import br.com.quick_task.request.TaskList.TaskListPutRequestBody;
-import br.com.quick_task.response.List.TaskResponseBody;
+import br.com.quick_task.response.Task.TaskResponseBody;
 import br.com.quick_task.response.TaskList.TaskListResponseBody;
 import org.springframework.stereotype.Service;
 
