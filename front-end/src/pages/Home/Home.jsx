@@ -18,7 +18,7 @@ export default function Home() {
       setHasError(false);
 
       try {
-        const response = await fetchWithAuth("http://localhost:8080/list", { signal: signal });
+        const response = await fetchWithAuth("http://localhost:8080/list/all", { signal: signal });
         if (!response.ok) {
           const text = await response.text();
           throw new Error(`API error ${response.status}: ${text}`);
