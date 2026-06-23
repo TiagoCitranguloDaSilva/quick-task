@@ -3,3 +3,16 @@
   gap: 0.5em;
   grid-template-columns: repeat(auto-fill, minmax(min(36ch, 100%), 1fr));
 }
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+}
+
+.header p {
+  font-weight: 600;
+}

@@ -1,0 +1,26 @@
+.button {
+  display: flex;
+  align-items: center;
+
+  gap: 0.5em;
+  padding: 0.75em 1em;
+
+  background-color: hsl(205, 100%, 92%);
+  color: hsl(0, 0%, 0%);
+
+  &:hover {
+    background-color: hsl(205, 67%, 83%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(205, 57%, 73%);
+  }
+}
+
+.button[data-nolist="true"] {
+  justify-self: center;
+}
+
+.button_phrase {
+  font-weight: 600;
+}

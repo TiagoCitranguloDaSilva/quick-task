@@ -5,6 +5,7 @@ import List from "./partials/List/List";
 import styles from "./Home.module.css";
 import Loading from "./partials/Loading/Loading";
 import NoListFound from "./partials/NoListFound/NoListFound";
+import AddButton from "./partials/AddButton/AddButton";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -39,6 +40,8 @@ export default function Home() {
     [fetchWithAuth],
   );
 
+  function createNewList() {}
+
   useEffect(() => {
     mountedRef.current = true;
 
@@ -63,13 +66,20 @@ export default function Home() {
   if (!data) return <Loading />;
 
   // If has no list, show a no list found
-  if (data.length == 0) return <NoListFound />;
+  if (data.length == 0) return <NoListFound createNewList={createNewList} />;
 
   return (
-    <div className={`${styles.home} breakout`}>
-      {data.map((list) => (
-        <List list={list} key={list.id} />
-      ))}
-    </div>
+    <>
+      <div className={`${styles.header} breakout`}>
+        <p>Lists: {data.length}</p>
+
+        <AddButton createNewList={createNewList} />
+      </div>
+      <div className={`${styles.home} breakout`}>
+        {data.map((list) => (
+          <List list={list} key={list.id} />
+        ))}
+      </div>
+    </>
   );
 }
