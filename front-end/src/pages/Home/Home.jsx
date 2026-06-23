@@ -4,6 +4,7 @@ import Error from "./partials/Error/Error";
 import List from "./partials/List/List";
 import styles from "./Home.module.css";
 import Loading from "./partials/Loading/Loading";
+import NoListFound from "./partials/NoListFound/NoListFound";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -60,6 +61,9 @@ export default function Home() {
 
   // While loading lists show something on screen for feedback
   if (!data) return <Loading />;
+
+  // If has no list, show a no list found
+  if (data.length == 0) return <NoListFound />;
 
   return (
     <div className={`${styles.home} breakout`}>

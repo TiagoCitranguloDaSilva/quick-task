@@ -1,0 +1,23 @@
+<svg width="640" height="640" viewBox="0 0 640 640" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <animateTransform
+      attributeName="transform"
+      attributeType="XML"
+      type="translate"
+      dur="4s"
+      repeatCount="indefinite"
+      keyTimes="0; 0.5; 1"
+      values="0 -24; 0 24; 0 -24"
+      calcMode="spline"
+      keySplines="0.6 0 0.4 1; 0.6 0 0.4 1"
+    />
+
+    <rect x="160" y="120" width="320" height="400" rx="16" fill="#F0D1D1" />
+    <line x1="220" y1="224" x2="420" y2="224" stroke="#E5ABAB" stroke-width="24" />
+    <line x1="220" y1="288" x2="420" y2="288" stroke="#E5ABAB" stroke-width="24" />
+    <line x1="220" y1="352" x2="420" y2="352" stroke="#E5ABAB" stroke-width="24" />
+    <line x1="220" y1="416" x2="420" y2="416" stroke="#E5ABAB" stroke-width="24" />
+    <rect x="200" y="104" width="240" height="32" rx="16" fill="#F69C9C" />
+    <rect x="240" y="80" width="160" height="48" rx="24" fill="#F69C9C" />
+  </g>
+</svg>
