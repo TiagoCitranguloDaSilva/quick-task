@@ -6,6 +6,7 @@ import styles from "./Home.module.css";
 import Loading from "./partials/Loading/Loading";
 import NoListFound from "./partials/NoListFound/NoListFound";
 import AddButton from "./partials/AddButton/AddButton";
+import CreateNewList from "./partials/CreateNewList/CreateNewList";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -13,6 +14,8 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const mountedRef = useRef(true);
   const startedRef = useRef(false);
+
+  const dialogRef = useRef(null);
 
   const fetchLists = useCallback(
     async (signal) => {
@@ -40,7 +43,9 @@ export default function Home() {
     [fetchWithAuth],
   );
 
-  function createNewList() {}
+  function openCreateNewList() {
+    dialogRef.current.showModal();
+  }
 
   useEffect(() => {
     mountedRef.current = true;
@@ -66,20 +71,28 @@ export default function Home() {
   if (!data) return <Loading />;
 
   // If has no list, show a no list found
-  if (data.length == 0) return <NoListFound createNewList={createNewList} />;
+  if (data.length == 0)
+    return (
+      <>
+        <NoListFound openCreateNewList={openCreateNewList} />;
+        <CreateNewList ref={dialogRef} />
+      </>
+    );
 
   return (
     <>
       <div className={`${styles.header} breakout`}>
         <p>Lists: {data.length}</p>
 
-        <AddButton createNewList={createNewList} />
+        <AddButton openCreateNewList={openCreateNewList} />
       </div>
       <div className={`${styles.home} breakout`}>
         {data.map((list) => (
           <List list={list} key={list.id} />
         ))}
       </div>
+
+      <CreateNewList ref={dialogRef} />
     </>
   );
 }

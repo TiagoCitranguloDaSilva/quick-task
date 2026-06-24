@@ -1,7 +1,7 @@
 import AddButton from "../AddButton/AddButton";
 import styles from "./NoListFound.module.css";
 
-export default function NoListFound({ createNewList }) {
+export default function NoListFound({ openCreateNewList }) {
   return (
     <div className={styles.main}>
       <img src="/assets/images/NoList.svg" alt="" />
@@ -11,7 +11,7 @@ export default function NoListFound({ createNewList }) {
         <span>Create a list and start organizing.</span>
       </p>
 
-      <AddButton noList={true} createNewList={createNewList} />
+      <AddButton noList={true} openCreateNewList={openCreateNewList} />
     </div>
   );
 }

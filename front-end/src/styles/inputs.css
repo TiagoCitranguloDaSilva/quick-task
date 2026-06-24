@@ -29,6 +29,7 @@ button,
   }
 }
 
+textarea,
 input,
 .input {
   padding: 0.25em 0.5em;
@@ -44,4 +45,14 @@ input,
   &:focus {
     background-color: hsl(207, 33%, 95%);
   }
+}
+
+.square {
+  width: 2em;
+  height: 2em;
+  padding: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
