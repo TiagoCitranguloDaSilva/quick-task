@@ -42,6 +42,7 @@ public class TaskService {
         Task task = Task.builder()
                 .content(request.getContent())
                 .list(list)
+                .isDone(request.isDone())
                 .build();
 
         return convertToDTO(taskRepository.save(task));
@@ -64,6 +65,7 @@ public class TaskService {
 
         task.setContent(request.getContent());
         task.setList(taskList);
+        task.setDone(request.isDone());
 
         return convertToDTO(taskRepository.save(task));
 
@@ -93,6 +95,7 @@ public class TaskService {
                 .id(task.getId())
                 .content(task.getContent())
                 .listId(task.getList().getId())
+                .done(task.isDone())
                 .build();
     }
 

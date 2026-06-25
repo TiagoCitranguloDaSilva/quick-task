@@ -23,6 +23,9 @@ public class Task {
     @Column(nullable = false)
     private String content;
 
+    @Column(nullable = false)
+    private boolean isDone;
+
     @ManyToOne
     @JoinColumn(name = "list_id", nullable = false)
     private TaskList list;

@@ -24,4 +24,8 @@ public class TaskPostRequestBody {
     @Schema(example = "1")
     private Long listId;
 
+    @NotNull(message = "Done value is required")
+    @Schema(example = "false")
+    private boolean done;
+
 }
