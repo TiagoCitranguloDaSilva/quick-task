@@ -19,6 +19,7 @@ function getCookie(name) {
 
 function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useState(null);
+  const [ready, setReady] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,7 +41,10 @@ function AuthProvider({ children }) {
     // If the stored cookie token is the same as session token
     if (cookieToken !== accessToken) {
       // This avoids the synchronous setState warning
-      Promise.resolve().then(() => setAccessToken(cookieToken));
+      Promise.resolve().then(() => {
+        setAccessToken(cookieToken);
+        setReady(true);
+      });
     }
   }, [location.pathname, navigate, accessToken]);
 
@@ -142,7 +146,7 @@ function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ accessToken, setAccessToken, login, logout, register }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken, login, logout, register, ready }}>
       {children}
     </AuthContext.Provider>
   );
