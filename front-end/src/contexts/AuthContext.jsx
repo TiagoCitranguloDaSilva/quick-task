@@ -45,6 +45,8 @@ function AuthProvider({ children }) {
         setAccessToken(cookieToken);
         setReady(true);
       });
+    } else {
+      setReady(true);
     }
   }, [location.pathname, navigate, accessToken]);
 
