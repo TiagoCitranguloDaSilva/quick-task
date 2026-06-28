@@ -71,13 +71,14 @@ export default function Home() {
   if (!data) return <Loading />;
 
   // If has no list, show a no list found
-  if (data.length == 0)
+  if (data.length == 0) {
     return (
       <>
         <NoListFound openCreateNewList={openCreateNewList} />;
         <CreateNewList ref={dialogRef} />
       </>
     );
+  }
 
   return (
     <>

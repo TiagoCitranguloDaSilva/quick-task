@@ -30,7 +30,7 @@ button,
 }
 
 textarea,
-input:not(input[type="checkbox"]),
+input,
 .input {
   padding: 0.25em 0.5em;
   background-color: hsl(210, 48%, 91%);
@@ -47,12 +47,17 @@ input:not(input[type="checkbox"]),
   }
 }
 
+:is(textarea, input)[data-invalid="true"] {
+  border-color: hsl(0, 83%, 35%);
+}
+
 input[type="checkbox"] {
   appearance: none;
   position: relative;
 
   width: 1.5em;
   height: 1.5em;
+  padding: 0;
 
   background-color: hsl(210, 29%, 95%);
   border: solid 0.125em hsl(208, 67%, 55%);
@@ -112,4 +117,12 @@ input[type="checkbox"]:checked {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.validation_error {
+  color: hsl(0, 83%, 35%);
+}
+
+.lucide-asterisk {
+  stroke: hsl(0, 83%, 35%);
 }
