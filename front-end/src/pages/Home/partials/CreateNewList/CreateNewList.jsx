@@ -14,8 +14,8 @@ export default function CreateNewList({ ref, updateLists }) {
       const response = await fetchWithAuth("http://localhost:8080/list/create", {
         method: "POST",
         body: JSON.stringify({
-          title: data.title.trim(),
-          description: data.description.trim(),
+          title: data.title,
+          description: data.description,
         }),
         signal: controllerRef.current.signal,
       });
@@ -47,6 +47,7 @@ export default function CreateNewList({ ref, updateLists }) {
       controllerRef={controllerRef}
       requestStatus={requestStatus}
       setRequestStatus={setRequestStatus}
+      submitType="create"
     />
   );
 }

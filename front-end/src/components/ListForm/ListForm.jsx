@@ -1,6 +1,6 @@
 import styles from "./ListForm.module.css";
 
-import { Asterisk, ClipboardPlus, Plus, X } from "lucide-react";
+import { Asterisk, ClipboardPlus, Plus, Save, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../hooks/useApi";
 
@@ -11,6 +11,7 @@ export default function ListForm({
   requestStatus,
   setRequestStatus,
   data,
+  submitType,
 }) {
   const [form, setForm] = useState({ title: "", description: "" });
   const [errors, setErros] = useState({ title: false, description: false });
@@ -21,7 +22,7 @@ export default function ListForm({
     ref.current?.close();
   }
 
-  function createNewList() {
+  function handleSubmitButton() {
     setRequestStatus("idle");
     const values = {
       title: form.title.trim(),
@@ -129,9 +130,18 @@ export default function ListForm({
               Cancel
             </button>
 
-            <button className={styles.create_button} onClick={createNewList}>
-              <ClipboardPlus />
-              Create
+            <button className={styles.create_button} onClick={handleSubmitButton}>
+              {submitType == "create" ? (
+                <>
+                  <ClipboardPlus />
+                  Create
+                </>
+              ) : (
+                <>
+                  <Save />
+                  Save changes
+                </>
+              )}
             </button>
           </div>
         </div>

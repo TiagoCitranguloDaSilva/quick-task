@@ -61,6 +61,7 @@ export default function EditList({ ref, updateLists, currentListEditing }) {
       requestStatus={requestStatus}
       setRequestStatus={setRequestStatus}
       data={currentListEditing}
+      submitType="edit"
     />
   );
 }
