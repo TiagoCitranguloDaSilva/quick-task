@@ -14,53 +14,55 @@ export default function Home() {
   const [hasError, setHasError] = useState(false);
   const mountedRef = useRef(true);
   const startedRef = useRef(false);
+  const controllerRef = useRef(new AbortController());
 
   const dialogRef = useRef(null);
 
-  const fetchLists = useCallback(
-    async (signal) => {
-      setData(null);
-      setHasError(false);
+  const fetchLists = useCallback(async () => {
+    setData(null);
+    setHasError(false);
 
-      try {
-        const response = await fetchWithAuth("http://localhost:8080/list/all", { signal: signal });
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`API error ${response.status}: ${text}`);
-        }
-
-        // Get data as JSON
-        const json = await response.json();
-
-        // If still on the same screen update the data
-        if (mountedRef.current) setData(json);
-      } catch (e) {
-        // If still on the same screen show error on screen
-        console.error(e);
-        if (mountedRef.current) setHasError(true);
+    try {
+      const response = await fetchWithAuth("http://localhost:8080/list/all", {
+        signal: controllerRef.current.signal,
+      });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`API error ${response.status}: ${text}`);
       }
-    },
-    [fetchWithAuth],
-  );
+
+      // Get data as JSON
+      const json = await response.json();
+
+      // If still on the same screen update the data
+      if (mountedRef.current) setData(json);
+    } catch (e) {
+      // If still on the same screen show error on screen
+      console.error(e);
+      if (mountedRef.current) setHasError(true);
+    }
+  }, [fetchWithAuth]);
 
   function openCreateNewList() {
     dialogRef.current.showModal();
   }
 
+  function updateLists() {
+    fetchLists(controllerRef.current.signal);
+  }
+
   useEffect(() => {
     mountedRef.current = true;
 
-    const controller = new AbortController();
-
     // Fetch only on the first mount
     if (!startedRef.current) {
-      fetchLists(controller.signal);
+      fetchLists(controllerRef.current.signal);
       startedRef.current = true;
     }
 
     return () => {
       mountedRef.current = false;
-      controller.abort();
+      controllerRef.current.abort();
     };
   }, [fetchLists]);
 
@@ -75,7 +77,7 @@ export default function Home() {
     return (
       <>
         <NoListFound openCreateNewList={openCreateNewList} />;
-        <CreateNewList ref={dialogRef} />
+        <CreateNewList ref={dialogRef} updateLists={updateLists} />
       </>
     );
   }
@@ -93,7 +95,7 @@ export default function Home() {
         ))}
       </div>
 
-      <CreateNewList ref={dialogRef} />
+      <CreateNewList ref={dialogRef} updateLists={updateLists} />
     </>
   );
 }

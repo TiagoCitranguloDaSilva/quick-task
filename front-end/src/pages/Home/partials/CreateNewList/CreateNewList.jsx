@@ -3,7 +3,7 @@ import styles from "./CreateNewList.module.css";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../../../hooks/useApi";
 
-export default function CreateNewList({ ref }) {
+export default function CreateNewList({ ref, updateLists }) {
   const { fetchWithAuth } = useApi();
 
   const [form, setForm] = useState({ title: "", description: "" });
@@ -41,6 +41,9 @@ export default function CreateNewList({ ref }) {
       setForm({ title: "", description: "" });
       // Close dialog
       ref.current?.close();
+
+      // Update lists on home
+      updateLists();
     } catch (e) {
       // If still on the same screen show error on screen
       console.error(e);
