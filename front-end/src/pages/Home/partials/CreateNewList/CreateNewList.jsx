@@ -1,16 +1,55 @@
 import { Asterisk, ClipboardPlus, Plus, X } from "lucide-react";
 import styles from "./CreateNewList.module.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import useApi from "../../../../hooks/useApi";
 
 export default function CreateNewList({ ref }) {
+  const { fetchWithAuth } = useApi();
+
   const [form, setForm] = useState({ title: "", description: "" });
   const [errors, setErros] = useState({ title: false, description: false });
+
+  const controllerRef = useRef(new AbortController());
+  const [requestStatus, setRequestStatus] = useState("idle");
+  const mountedRef = useRef(true);
 
   function close() {
     ref.current?.close();
   }
 
+  const requestCreateList = useCallback(async () => {
+    setRequestStatus("idle");
+    try {
+      const response = await fetchWithAuth("http://localhost:8080/list/create", {
+        method: "POST",
+        body: JSON.stringify({
+          title: form.title.trim(),
+          description: form.description.trim(),
+        }),
+        signal: controllerRef.current.signal,
+      });
+
+      if (!response.ok) {
+        setRequestStatus("error");
+        const text = await response.text();
+        throw new Error(`API error ${response.status}: ${text}`);
+      }
+
+      // With success on creating
+
+      // Clear out fields
+      setForm({ title: "", description: "" });
+      // Close dialog
+      ref.current?.close();
+    } catch (e) {
+      // If still on the same screen show error on screen
+      console.error(e);
+      if (mountedRef.current) setRequestStatus("error");
+    }
+  });
+
   function createNewList() {
+    setRequestStatus("idle");
     const values = {
       title: form.title.trim(),
       description: form.description.trim(),
@@ -35,9 +74,18 @@ export default function CreateNewList({ ref }) {
       return;
     }
 
-    console.log("Good");
-    // ref.current?.close();
+    requestCreateList();
   }
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+      // On unmount cancel fetch
+      controllerRef.current.abort();
+    };
+  }, []);
 
   return (
     <dialog className={styles.dialog} ref={ref}>
@@ -84,6 +132,8 @@ export default function CreateNewList({ ref }) {
               <p className="validation_error">Description is required</p>
             ) : null}
           </div>
+
+          {requestStatus == "error" ? <p className="validation_error">Server error</p> : null}
 
           <div className={styles.action_buttons}>
             <button className={styles.cancel_button} onClick={close}>
