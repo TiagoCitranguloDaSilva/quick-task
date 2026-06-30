@@ -3,12 +3,13 @@ import { Link } from "react-router";
 import styles from "./List.module.css";
 import { SquarePen, Trash } from "lucide-react";
 
-export default function List({ list }) {
+export default function List({ list, openEditList }) {
   const listTasksLimited = list.tasks.slice(0, 10);
 
   function handleEditButton(e) {
     e.preventDefault();
     e.stopPropagation();
+    openEditList(list);
   }
 
   function handleDeleteButton(e) {

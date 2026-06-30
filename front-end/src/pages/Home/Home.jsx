@@ -7,6 +7,7 @@ import Loading from "./partials/Loading/Loading";
 import NoListFound from "./partials/NoListFound/NoListFound";
 import AddButton from "./partials/AddButton/AddButton";
 import CreateNewList from "./partials/CreateNewList/CreateNewList";
+import EditList from "./partials/EditList/EditList";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -16,7 +17,10 @@ export default function Home() {
   const startedRef = useRef(false);
   const controllerRef = useRef(new AbortController());
 
-  const dialogRef = useRef(null);
+  const createDialogRef = useRef(null);
+  const editDialogRef = useRef(null);
+
+  const [currentListEditing, setCurrentListEditing] = useState(null);
 
   const fetchLists = useCallback(async () => {
     setData(null);
@@ -44,7 +48,12 @@ export default function Home() {
   }, [fetchWithAuth]);
 
   function openCreateNewList() {
-    dialogRef.current.showModal();
+    createDialogRef.current.showModal();
+  }
+
+  function openEditList(list) {
+    setCurrentListEditing(list);
+    editDialogRef.current.showModal();
   }
 
   function updateLists() {
@@ -77,7 +86,12 @@ export default function Home() {
     return (
       <>
         <NoListFound openCreateNewList={openCreateNewList} />;
-        <CreateNewList ref={dialogRef} updateLists={updateLists} />
+        <CreateNewList ref={createcreateDialogRef} updateLists={updateLists} />
+        <EditList
+          ref={editDialogRef}
+          updateLists={updateLists}
+          currentListEditing={currentListEditing}
+        />
       </>
     );
   }
@@ -91,11 +105,16 @@ export default function Home() {
       </div>
       <div className={`${styles.home} breakout`}>
         {data.map((list) => (
-          <List list={list} key={list.id} />
+          <List list={list} key={list.id} openEditList={openEditList} />
         ))}
       </div>
 
-      <CreateNewList ref={dialogRef} updateLists={updateLists} />
+      <CreateNewList ref={createDialogRef} updateLists={updateLists} />
+      <EditList
+        ref={editDialogRef}
+        updateLists={updateLists}
+        currentListEditing={currentListEditing}
+      />
     </>
   );
 }

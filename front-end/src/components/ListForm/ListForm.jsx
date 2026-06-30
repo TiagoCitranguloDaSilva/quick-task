@@ -10,6 +10,7 @@ export default function ListForm({
   controllerRef,
   requestStatus,
   setRequestStatus,
+  data,
 }) {
   const [form, setForm] = useState({ title: "", description: "" });
   const [errors, setErros] = useState({ title: false, description: false });
@@ -48,6 +49,13 @@ export default function ListForm({
 
     onSubmit(values);
   }
+
+  useEffect(() => {
+    setForm({
+      title: data?.title ?? "",
+      description: data?.description ?? "",
+    });
+  }, [data]);
 
   useEffect(() => {
     if (requestStatus != "success") return;
