@@ -1,10 +1,11 @@
 .list {
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto 1fr auto;
   align-items: end;
   gap: 0.5em;
   padding: 1em;
   border-radius: 1em;
+  overflow: hidden;
 
   border: 0.125em solid hsl(212, 74%, 88%);
   background-color: hsl(213, 65%, 97%);
@@ -22,6 +23,7 @@
   padding-top: 0.5em;
   display: grid;
   gap: 0.25em;
+  height: 100%;
 }
 
 .list_item {
@@ -29,4 +31,18 @@
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 0.5em;
+}
+
+.button_actions {
+  display: flex;
+  gap: 0.5em;
+  justify-content: end;
+  opacity: 0;
+  transition: 0.25s 0.125s;
+}
+
+.list:is(:hover, :has(:focus-visible)) .button_actions {
+  opacity: 1;
+  transition: 0.25s;
+  translate: 0 0%;
 }

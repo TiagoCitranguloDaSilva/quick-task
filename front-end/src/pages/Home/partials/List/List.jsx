@@ -1,9 +1,20 @@
 import { Link } from "react-router";
 
 import styles from "./List.module.css";
+import { SquarePen, Trash } from "lucide-react";
 
 export default function List({ list }) {
-  const listTasksLimited = list.tasks.slice(0, 4);
+  const listTasksLimited = list.tasks.slice(0, 10);
+
+  function handleEditButton(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  function handleDeleteButton(e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
   return (
     <Link to={`/list/${list.id}`} className={styles.list} data-no-default="true">
@@ -21,6 +32,16 @@ export default function List({ list }) {
             </div>
           );
         })}
+      </div>
+
+      <div className={styles.button_actions}>
+        <button type="button" className="square" onClick={handleEditButton}>
+          <SquarePen size={16} />
+        </button>
+
+        <button type="button" className="square destructive" onClick={handleDeleteButton}>
+          <Trash size={16} />
+        </button>
       </div>
     </Link>
   );

@@ -29,6 +29,19 @@ button,
   }
 }
 
+:is(button, .button).destructive {
+  background-color: hsl(4, 83%, 40%);
+  color: hsl(0, 0%, 100%);
+
+  &:hover {
+    background-color: hsl(4, 76%, 59%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(4, 80%, 31%);
+  }
+}
+
 textarea,
 input,
 .input {
