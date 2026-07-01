@@ -1,5 +1,3 @@
-import styles from "./ListForm.module.css";
-
 import { Asterisk, ClipboardPlus, Plus, Save, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../hooks/useApi";
@@ -77,14 +75,14 @@ export default function ListForm({
   }, []);
 
   return (
-    <dialog className={styles.dialog} ref={ref}>
-      <div className={styles.dialog_container}>
-        <button className={`square ${styles.close_button}`} title="Close" onClick={close}>
+    <dialog className="dialog" ref={ref}>
+      <div className="dialog_container">
+        <button className="square close_button" title="Close" onClick={close}>
           <X />
         </button>
 
-        <div className={styles.dialog_contents}>
-          <div className={styles.dialog_group}>
+        <div className="dialog_contents">
+          <div className="dialog_group">
             <label htmlFor="title">
               Title
               <Asterisk size={16} />
@@ -102,7 +100,7 @@ export default function ListForm({
             {errors.title ? <p className="validation_error">Title is required</p> : null}
           </div>
 
-          <div className={styles.dialog_group}>
+          <div className="dialog_group">
             <label htmlFor="description">
               Description
               <Asterisk size={16} />
@@ -124,13 +122,13 @@ export default function ListForm({
 
           {requestStatus == "error" ? <p className="validation_error">Server error</p> : null}
 
-          <div className={styles.action_buttons}>
-            <button className={styles.cancel_button} onClick={close}>
+          <div className="action_buttons">
+            <button className="cancel_button" onClick={close}>
               <X />
               Cancel
             </button>
 
-            <button className={styles.create_button} onClick={handleSubmitButton}>
+            <button className="submit_button" onClick={handleSubmitButton}>
               {submitType == "create" ? (
                 <>
                   <ClipboardPlus />
