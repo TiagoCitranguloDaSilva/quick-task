@@ -8,6 +8,7 @@ import NoListFound from "./partials/NoListFound/NoListFound";
 import AddButton from "./partials/AddButton/AddButton";
 import CreateNewList from "./partials/CreateNewList/CreateNewList";
 import EditList from "./partials/EditList/EditList";
+import DeleteList from "./partials/DeleteList/DeleteList";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -19,6 +20,7 @@ export default function Home() {
 
   const createDialogRef = useRef(null);
   const editDialogRef = useRef(null);
+  const deleteDialogRef = useRef(null);
 
   const [currentListEditing, setCurrentListEditing] = useState(null);
 
@@ -54,6 +56,11 @@ export default function Home() {
   function openEditList(list) {
     setCurrentListEditing(list);
     editDialogRef.current.showModal();
+  }
+
+  function openDeleteList(list) {
+    setCurrentListEditing(list);
+    deleteDialogRef.current.showModal();
   }
 
   function updateLists() {
@@ -92,6 +99,11 @@ export default function Home() {
           updateLists={updateLists}
           currentListEditing={currentListEditing}
         />
+        <DeleteList
+          ref={deleteDialogRef}
+          updateLists={updateLists}
+          currentListEditing={currentListEditing}
+        />
       </>
     );
   }
@@ -105,13 +117,23 @@ export default function Home() {
       </div>
       <div className={`${styles.home} breakout`}>
         {data.map((list) => (
-          <List list={list} key={list.id} openEditList={openEditList} />
+          <List
+            list={list}
+            key={list.id}
+            openEditList={openEditList}
+            openDeleteList={openDeleteList}
+          />
         ))}
       </div>
 
       <CreateNewList ref={createDialogRef} updateLists={updateLists} />
       <EditList
         ref={editDialogRef}
+        updateLists={updateLists}
+        currentListEditing={currentListEditing}
+      />
+      <DeleteList
+        ref={deleteDialogRef}
         updateLists={updateLists}
         currentListEditing={currentListEditing}
       />
