@@ -8,7 +8,7 @@ export default function EditList({ ref, updateLists, currentListEditing }) {
   const controllerRef = useRef(new AbortController());
   const [requestStatus, setRequestStatus] = useState("idle");
 
-  const requestCreateList = useCallback(async (data) => {
+  const requestEditList = useCallback(async (data) => {
     setRequestStatus("idle");
 
     const titleChanged = data.title != currentListEditing.title;
@@ -56,7 +56,7 @@ export default function EditList({ ref, updateLists, currentListEditing }) {
   return (
     <ListForm
       ref={ref}
-      onSubmit={requestCreateList}
+      onSubmit={requestEditList}
       controllerRef={controllerRef}
       requestStatus={requestStatus}
       setRequestStatus={setRequestStatus}
