@@ -1,10 +1,11 @@
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import styles from "./ShowList.module.css";
 import useApi from "../../hooks/useApi";
 import { useCallback, useEffect, useRef, useState } from "react";
 import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import Error from "./partials/Error/Error";
 import Loading from "./partials/Loading/Loading";
+import { ChevronLeft } from "lucide-react";
 
 export default function ShowList() {
   const { id } = useParams();
@@ -77,15 +78,36 @@ export default function ShowList() {
   if (!data) return <Loading />;
 
   return (
-    <div>
-      <h2>{data.title}</h2>
-      <p>{data.description}</p>
-      {data.tasks?.map((task) => (
-        <span className={styles.list_item} key={task.id}>
-          <input type="checkbox" />
-          <span>{task.content}</span>
-        </span>
-      ))}
-    </div>
+    <>
+      <Link
+        to="/"
+        className={`button ${styles.back_button}`}
+        data-no-default="true"
+        title="Go back to home"
+      >
+        <ChevronLeft />
+        Back
+      </Link>
+
+      <div className={styles.header}>
+        <h2 className={styles.title}>{data.title}</h2>
+        <p className={styles.description}>{data.description}</p>
+      </div>
+
+      <div className={styles.tasks}>
+        {data.tasks?.map((task) => (
+          <>
+            <div className={styles.items} htmlFor={task.id}>
+              <label className={styles.content}>
+                <input type="checkbox" id={task.id} />
+                <span>{task.content}</span>
+              </label>
+
+              <div className={styles.actions}>{/* Edit, delete and save buttons */}</div>
+            </div>
+          </>
+        ))}
+      </div>
+    </>
   );
 }
