@@ -30,7 +30,7 @@ export default function List({ list, openEditList, openDeleteList }) {
           return (
             <div className={styles.list_item} key={inputId}>
               <input type="checkbox" id={inputId} onClick={(e) => e.stopPropagation()} />
-              <label htmlFor={inputId}>{task.content}</label>
+              <p>{task.content}</p>
             </div>
           );
         })}
