@@ -92,8 +92,8 @@ export default function Home() {
   if (data.length == 0) {
     return (
       <>
-        <NoListFound openCreateNewList={openCreateNewList} />;
-        <CreateNewList ref={createcreateDialogRef} updateLists={updateLists} />
+        <NoListFound openCreateNewList={openCreateNewList} />
+        <CreateNewList ref={createDialogRef} updateLists={updateLists} />
         <EditList
           ref={editDialogRef}
           updateLists={updateLists}
