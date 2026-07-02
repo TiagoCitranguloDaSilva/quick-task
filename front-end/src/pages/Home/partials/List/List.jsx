@@ -6,6 +6,10 @@ import { SquarePen, Trash } from "lucide-react";
 export default function List({ list, openEditList, openDeleteList }) {
   const listTasksLimited = list.tasks.slice(0, 10);
 
+  const descriptionSplit = list.description.split("\n");
+  const description =
+    descriptionSplit.slice(0, 4).join("\n") + (descriptionSplit.length > 4 ? "\n..." : "");
+
   function handleEditButton(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -21,7 +25,7 @@ export default function List({ list, openEditList, openDeleteList }) {
   return (
     <Link to={`/list/${list.id}`} className={styles.list} data-no-default="true">
       <p className={styles.list_title}>{list.title}</p>
-      <p className={styles.list_description}>{list.description}</p>
+      <p className={styles.list_description}>{description}</p>
 
       <div className={styles.list_items}>
         {listTasksLimited?.map((task) => {

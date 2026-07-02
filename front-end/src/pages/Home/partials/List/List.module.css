@@ -1,6 +1,6 @@
 .list {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   align-items: end;
   gap: 0.5em;
   padding: 1em;
@@ -18,12 +18,17 @@
   font-weight: 900;
 }
 
+.list_description {
+  white-space: break-spaces;
+  word-break: break-word;
+  height: 100%;
+}
+
 .list_items {
   border-top: 0.125em solid hsl(212, 74%, 88%);
   padding-top: 0.5em;
   display: grid;
   gap: 0.25em;
-  height: 100%;
 }
 
 .list_item {
