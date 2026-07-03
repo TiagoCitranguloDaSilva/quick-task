@@ -121,6 +121,7 @@ public class TaskListService {
                         .id(task.getId())
                         .content(task.getContent())
                         .listId(task.getList().getId())
+                        .done(task.isDone())
                         .build());
             });
         }
