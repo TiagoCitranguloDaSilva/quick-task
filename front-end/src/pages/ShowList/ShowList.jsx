@@ -18,6 +18,17 @@ export default function ShowList() {
   const mountedRef = useRef(true);
   const startedRef = useRef(false);
 
+  function onDelete(deleteTask) {
+    setData((prevData) => {
+      console.log(prevData);
+
+      return {
+        ...prevData,
+        tasks: prevData.tasks.filter((task) => task.id !== deleteTask.id),
+      };
+    });
+  }
+
   const fetchList = useCallback(
     async (signal) => {
       setData(null);
@@ -97,7 +108,7 @@ export default function ShowList() {
 
       <div className={styles.tasks}>
         {data.tasks?.map((task) => (
-          <ListItem currentTask={task} key={task.id} />
+          <ListItem currentTask={task} key={task.id} onDelete={onDelete} />
         ))}
       </div>
     </>

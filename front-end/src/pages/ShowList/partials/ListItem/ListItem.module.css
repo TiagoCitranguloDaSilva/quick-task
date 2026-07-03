@@ -60,3 +60,42 @@
   gap: 0.5em;
   align-items: center;
 }
+
+.confirm_delete {
+  position: relative;
+
+  filter: saturate(1.25);
+}
+
+@property --position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+.confirm_delete::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background-color: hsla(0, 0%, 0%, 0.35);
+  mix-blend-mode: darken;
+
+  mask-image: conic-gradient(
+    from 0deg at 50% 50%,
+    black var(--position),
+    transparent var(--position)
+  );
+
+  animation: 3s confirm_deletion linear forwards;
+}
+
+@keyframes confirm_deletion {
+  0% {
+    --position: 100%;
+  }
+  100% {
+    --position: 0%;
+  }
+}

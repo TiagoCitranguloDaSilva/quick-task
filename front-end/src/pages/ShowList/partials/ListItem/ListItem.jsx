@@ -3,7 +3,7 @@ import styles from "./ListItem.module.css";
 import { CircleX, LoaderCircle, Pen, Save, Trash } from "lucide-react";
 import useApi from "../../../../hooks/useApi";
 
-export default function ListItem({ currentTask }) {
+export default function ListItem({ currentTask, onDelete }) {
   const { fetchWithAuth } = useApi();
 
   const [task, setTask] = useState(currentTask);
@@ -17,6 +17,11 @@ export default function ListItem({ currentTask }) {
   const inputRef = useRef(null);
   const editButtonRef = useRef(null);
   const startedEditing = useRef(false);
+
+  const confirmDeleteTimeoutRef = useRef(null);
+  const deleteTimeoutRef = useRef(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
 
   const requestUpdateItem = useCallback(async () => {
     setRequestStatus("loading");
@@ -53,6 +58,31 @@ export default function ListItem({ currentTask }) {
       if (mountedRef.current) setRequestStatus("error");
     }
   }, [fetchWithAuth, draft, task]);
+
+  const requestDeleteItem = useCallback(async () => {
+    setRequestStatus("loading");
+
+    try {
+      const response = await fetchWithAuth(`http://localhost:8080/task/delete/${currentTask.id}`, {
+        method: "DELETE",
+        signal: controllerRef.current.signal,
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`API error ${response.status}: ${text}`);
+      }
+
+      // If still on the same screen update the data
+      if (mountedRef.current) {
+        onDelete(currentTask);
+      }
+    } catch (e) {
+      // If still on the same screen show error on screen
+      console.error(e);
+      if (mountedRef.current) setRequestStatus("error");
+    }
+  }, [fetchWithAuth]);
 
   function handleStartEditing(e) {
     e?.preventDefault?.();
@@ -101,6 +131,29 @@ export default function ListItem({ currentTask }) {
     setIsEditing(false);
   }
 
+  function handleDeleteButton() {
+    setCanDelete(false);
+
+    // If already confirmed
+    if (confirmDelete && canDelete) {
+      requestDeleteItem();
+    } else if (!confirmDelete) {
+      // Not yet confirmed
+      setConfirmDelete(true);
+
+      // Wait a bit so its confirmed to delete
+      confirmDeleteTimeoutRef.current = setTimeout(() => {
+        setCanDelete(true);
+
+        // After 2seconds of not clickig go back
+        deleteTimeoutRef.current = setTimeout(() => {
+          setConfirmDelete(false);
+          setCanDelete(false);
+        }, 2800);
+      }, 200);
+    }
+  }
+
   useEffect(() => {
     // If it's now editing
     if (isEditing) {
@@ -119,6 +172,8 @@ export default function ListItem({ currentTask }) {
       mountedRef.current = false;
       // On unmount cancel fetch
       controllerRef.current.abort();
+      clearTimeout(confirmDeleteTimeoutRef.current);
+      clearTimeout(deleteTimeoutRef.current);
     };
   }, []);
 
@@ -155,7 +210,12 @@ export default function ListItem({ currentTask }) {
           </button>
         )}
 
-        <button type="button" className="square destructive">
+        <button
+          type="button"
+          className={`square destructive ${confirmDelete ? styles.confirm_delete : ""}`}
+          onClick={handleDeleteButton}
+          title="Click to Delete, then click again to confirm the deletion (waiting 3 seconds it will reset to the start)"
+        >
           <Trash size={16} />
         </button>
       </div>
