@@ -29,28 +29,3 @@
   display: grid;
   padding-bottom: 2em;
 }
-
-.items {
-  display: flex;
-  justify-content: space-between;
-  border-radius: 1em;
-  padding: 0.5em;
-}
-
-.items:is(:hover, :has(:focus-visible)) {
-  background-color: hsl(207, 18%, 88%);
-}
-
-.content,
-.actions {
-  display: flex;
-  gap: 0.5em;
-  align-items: center;
-}
-
-.content {
-  flex-grow: 1;
-}
-
-.actions {
-}

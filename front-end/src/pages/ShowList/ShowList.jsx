@@ -6,6 +6,7 @@ import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import Error from "./partials/Error/Error";
 import Loading from "./partials/Loading/Loading";
 import { ChevronLeft } from "lucide-react";
+import ListItem from "./partials/ListItem/ListItem";
 
 export default function ShowList() {
   const { id } = useParams();
@@ -96,16 +97,7 @@ export default function ShowList() {
 
       <div className={styles.tasks}>
         {data.tasks?.map((task) => (
-          <>
-            <div className={styles.items} htmlFor={task.id}>
-              <label className={styles.content}>
-                <input type="checkbox" id={task.id} />
-                <span>{task.content}</span>
-              </label>
-
-              <div className={styles.actions}>{/* Edit, delete and save buttons */}</div>
-            </div>
-          </>
+          <ListItem task={task} key={task.id} />
         ))}
       </div>
     </>

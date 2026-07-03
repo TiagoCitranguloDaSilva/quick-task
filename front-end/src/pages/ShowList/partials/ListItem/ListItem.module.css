@@ -1,0 +1,40 @@
+.items {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5em;
+  border-radius: 1em;
+  padding: 0.5em;
+  position: relative;
+}
+
+.items:is(:hover, :has(:focus-visible)) {
+  background-color: hsl(207, 18%, 88%);
+}
+
+.items[data-error="true"] {
+  background-color: hsl(5, 18%, 88%);
+}
+
+.content,
+.actions {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.content {
+  flex-grow: 1;
+}
+
+.content :is(span, .content_input) {
+  flex-grow: 1;
+  padding: 0.25em;
+  white-space: pre;
+}
+
+.content_input {
+  background-color: transparent;
+  border: none;
+  outline-offset: 0em;
+}
