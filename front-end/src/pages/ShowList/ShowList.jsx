@@ -97,7 +97,7 @@ export default function ShowList() {
 
       <div className={styles.tasks}>
         {data.tasks?.map((task) => (
-          <ListItem task={task} key={task.id} />
+          <ListItem currentTask={task} key={task.id} />
         ))}
       </div>
     </>

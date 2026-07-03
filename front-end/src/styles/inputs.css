@@ -132,7 +132,8 @@ input[type="checkbox"]:checked {
   align-items: center;
 }
 
-.validation_error {
+.validation_error,
+.error {
   color: hsl(0, 83%, 35%);
 }
 
