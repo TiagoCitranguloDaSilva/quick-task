@@ -25,10 +25,14 @@
 }
 
 .list_items {
-  border-top: 0.125em solid hsl(212, 74%, 88%);
-  padding-top: 0.5em;
   display: grid;
   gap: 0.25em;
+}
+
+.list_items[data-has-tasks="true"],
+.button_actions {
+  border-top: 0.125em solid hsl(212, 74%, 88%);
+  padding-top: 0.5em;
 }
 
 .list_item {
@@ -38,15 +42,27 @@
   gap: 0.5em;
 }
 
-.button_actions {
+.button_actions,
+.list_hidden,
+.button_actions_buttons {
   display: flex;
+  align-items: center;
   gap: 0.5em;
+}
+
+.button_actions {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.button_actions_buttons {
   justify-content: end;
   opacity: 0;
   transition: 0.25s 0.125s;
+  margin-left: auto;
 }
 
-.list:is(:hover, :has(:focus-visible)) .button_actions {
+.list:is(:hover, :has(:focus-visible)) .button_actions_buttons {
   opacity: 1;
   transition: 0.25s;
   translate: 0 0%;
