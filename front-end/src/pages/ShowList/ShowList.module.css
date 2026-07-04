@@ -23,6 +23,9 @@
 .description {
   white-space: break-spaces;
   word-break: break-word;
+
+  border-bottom: 0.125em solid hsl(212, 74%, 88%);
+  padding-bottom: 0.5em;
 }
 
 .tasks {

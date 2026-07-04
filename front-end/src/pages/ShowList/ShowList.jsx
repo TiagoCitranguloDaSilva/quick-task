@@ -7,12 +7,15 @@ import Error from "./partials/Error/Error";
 import Loading from "./partials/Loading/Loading";
 import { ChevronLeft } from "lucide-react";
 import ListItem from "./partials/ListItem/ListItem";
+import CreateItem from "./partials/CreateItem/CreateItem";
 
 export default function ShowList() {
   const { id } = useParams();
   const parsed = Number(id);
 
   const { fetchWithAuth } = useApi();
+  const controllerRef = useRef(new AbortController());
+
   const [data, setData] = useState(null);
   const [hasError, setHasError] = useState(false);
   const mountedRef = useRef(true);
@@ -20,8 +23,6 @@ export default function ShowList() {
 
   function onDelete(deleteTask) {
     setData((prevData) => {
-      console.log(prevData);
-
       return {
         ...prevData,
         tasks: prevData.tasks.filter((task) => task.id !== deleteTask.id),
@@ -29,33 +30,34 @@ export default function ShowList() {
     });
   }
 
-  const fetchList = useCallback(
-    async (signal) => {
-      setData(null);
-      setHasError(false);
+  function onAdd() {
+    fetchList();
+  }
 
-      try {
-        const response = await fetchWithAuth(`http://localhost:8080/list/${id}`, {
-          signal: signal,
-        });
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`API error ${response.status}: ${text}`);
-        }
+  const fetchList = useCallback(async () => {
+    setData(null);
+    setHasError(false);
 
-        // Get data as JSON
-        const json = await response.json();
-
-        // If still on the same screen update the data
-        if (mountedRef.current) setData(json);
-      } catch (e) {
-        // If still on the same screen show error on screen
-        console.error(e);
-        if (mountedRef.current) setHasError(true);
+    try {
+      const response = await fetchWithAuth(`http://localhost:8080/list/${id}`, {
+        signal: controllerRef.current.signal,
+      });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`API error ${response.status}: ${text}`);
       }
-    },
-    [fetchWithAuth, id],
-  );
+
+      // Get data as JSON
+      const json = await response.json();
+
+      // If still on the same screen update the data
+      if (mountedRef.current) setData(json);
+    } catch (e) {
+      // If still on the same screen show error on screen
+      console.error(e);
+      if (mountedRef.current) setHasError(true);
+    }
+  }, [fetchWithAuth, id]);
 
   useEffect(() => {
     mountedRef.current = true;
@@ -64,13 +66,13 @@ export default function ShowList() {
 
     // Fetch only on the first mount
     if (!startedRef.current) {
-      fetchList(controller.signal);
+      fetchList();
       startedRef.current = true;
     }
 
     return () => {
       mountedRef.current = false;
-      controller.abort();
+      controllerRef.current.abort();
     };
   }, [fetchList]);
 
@@ -110,6 +112,8 @@ export default function ShowList() {
         {data.tasks?.map((task) => (
           <ListItem currentTask={task} key={task.id} onDelete={onDelete} />
         ))}
+
+        <CreateItem listId={data.id} onAdd={onAdd} />
       </div>
     </>
   );
