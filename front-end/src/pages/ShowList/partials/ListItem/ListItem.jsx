@@ -7,6 +7,7 @@ export default function ListItem({ currentTask, onDelete }) {
   const { fetchWithAuth } = useApi();
 
   const [task, setTask] = useState(currentTask);
+  const [checked, setChecked] = useState(task.done);
 
   const mountedRef = useRef(true);
   const controllerRef = useRef(new AbortController());
@@ -23,41 +24,46 @@ export default function ListItem({ currentTask, onDelete }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [canDelete, setCanDelete] = useState(false);
 
-  const requestUpdateItem = useCallback(async () => {
-    setRequestStatus("loading");
+  const timeoutUpdateCheckbox = useRef(null);
 
-    const data = {
-      id: task.id,
-      content: draft.trim(),
-      listId: task.listId,
-      done: false,
-    };
+  const requestUpdateItem = useCallback(
+    async (currentlyChecked = null) => {
+      setRequestStatus("loading");
 
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      const data = {
+        id: task.id,
+        content: draft.trim(),
+        listId: task.listId,
+        done: currentlyChecked ?? task.done,
+      };
 
-    try {
-      const response = await fetchWithAuth("http://localhost:8080/task/edit", {
-        method: "PUT",
-        body: JSON.stringify(data),
-        signal: controllerRef.current.signal,
-      });
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`API error ${response.status}: ${text}`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      try {
+        const response = await fetchWithAuth("http://localhost:8080/task/edit", {
+          method: "PUT",
+          body: JSON.stringify(data),
+          signal: controllerRef.current.signal,
+        });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`API error ${response.status}: ${text}`);
+        }
+
+        // If still on the same screen update the data
+        if (mountedRef.current) {
+          setRequestStatus("idle");
+          setIsEditing(false);
+          setTask(data);
+        }
+      } catch (e) {
+        // If still on the same screen show error on screen
+        console.error(e);
+        if (mountedRef.current) setRequestStatus("error");
       }
-
-      // If still on the same screen update the data
-      if (mountedRef.current) {
-        setRequestStatus("idle");
-        setIsEditing(false);
-        setTask(data);
-      }
-    } catch (e) {
-      // If still on the same screen show error on screen
-      console.error(e);
-      if (mountedRef.current) setRequestStatus("error");
-    }
-  }, [fetchWithAuth, draft, task]);
+    },
+    [fetchWithAuth, draft, task],
+  );
 
   const requestDeleteItem = useCallback(async () => {
     setRequestStatus("loading");
@@ -83,6 +89,29 @@ export default function ListItem({ currentTask, onDelete }) {
       if (mountedRef.current) setRequestStatus("error");
     }
   }, [fetchWithAuth]);
+
+  function handleToggleTaskChecked(e) {
+    clearTimeout(timeoutUpdateCheckbox.current);
+
+    const currentlyChecked = e.target.checked;
+    setChecked(currentlyChecked);
+
+    timeoutUpdateCheckbox.current = setTimeout(() => {
+      // If the status is the same as before don't do fetch
+      if (task.done == currentlyChecked) return;
+
+      // Update current task
+      setTask((prevTask) => {
+        return {
+          ...prevTask,
+          done: currentlyChecked,
+        };
+      });
+
+      // Update on backend
+      requestUpdateItem(currentlyChecked);
+    }, 200);
+  }
 
   function handleStartEditing(e) {
     e?.preventDefault?.();
@@ -174,13 +203,14 @@ export default function ListItem({ currentTask, onDelete }) {
       controllerRef.current.abort();
       clearTimeout(confirmDeleteTimeoutRef.current);
       clearTimeout(deleteTimeoutRef.current);
+      clearTimeout(timeoutUpdateCheckbox.current);
     };
   }, []);
 
   return (
     <div className={styles.items} htmlFor={task.id} data-error={requestStatus == "error"}>
       <label className={styles.content}>
-        <input type="checkbox" id={task.id} />
+        <input type="checkbox" id={task.id} checked={checked} onChange={handleToggleTaskChecked} />
 
         {!isEditing ? (
           <span onDoubleClick={handleStartEditing}>{task.content}</span>
