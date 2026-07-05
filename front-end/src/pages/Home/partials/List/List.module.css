@@ -42,6 +42,10 @@
   gap: 0.5em;
 }
 
+.list_item[data-error="true"] {
+  background-color: hsl(5, 18%, 88%);
+}
+
 .button_actions,
 .list_hidden,
 .button_actions_buttons {
@@ -66,4 +70,17 @@
   opacity: 1;
   transition: 0.25s;
   translate: 0 0%;
+}
+
+.error {
+  margin-top: 0.5em;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  background-color: hsl(5, 18%, 88%);
+
+  padding: 0.5em;
+  border-radius: 0.5em;
 }

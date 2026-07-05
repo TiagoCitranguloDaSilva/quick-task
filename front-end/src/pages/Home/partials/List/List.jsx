@@ -1,9 +1,12 @@
 import { Link } from "react-router";
-
 import styles from "./List.module.css";
-import { Ellipsis, SquarePen, Trash } from "lucide-react";
+import { CircleX, Ellipsis, SquarePen, Trash } from "lucide-react";
+import Item from "./partials/Item/Item";
+import { useState } from "react";
 
 export default function List({ list, openEditList, openDeleteList }) {
+  const [requestStatus, setRequestStatus] = useState("idle");
+
   const listTasksLimited = list.tasks.slice(0, 10);
   const numberOfTasksHidden = list.tasks.length - 10;
 
@@ -33,12 +36,22 @@ export default function List({ list, openEditList, openDeleteList }) {
           const inputId = `task_${list.id}_${task.id}`;
 
           return (
-            <div className={styles.list_item} key={inputId}>
-              <input type="checkbox" id={inputId} onClick={(e) => e.stopPropagation()} />
-              <p>{task.content}</p>
-            </div>
+            <Item
+              className={styles.list_item}
+              key={inputId}
+              inputId={inputId}
+              task={task}
+              setRequestStatus={setRequestStatus}
+            />
           );
         })}
+
+        {requestStatus == "error" ? (
+          <p className={`error ${styles.error}`}>
+            <CircleX />
+            An error ocurred
+          </p>
+        ) : null}
       </div>
 
       <div className={styles.button_actions}>
