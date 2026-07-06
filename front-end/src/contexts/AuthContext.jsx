@@ -80,7 +80,7 @@ function AuthProvider({ children }) {
         };
       }
 
-      if (response.status == 401) {
+      if (response.status == 403) {
         const message = await response.text();
 
         return {
