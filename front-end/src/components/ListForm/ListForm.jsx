@@ -1,6 +1,7 @@
 import { Asterisk, ClipboardPlus, Plus, Save, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../hooks/useApi";
+import ErrorMessage from "../ErrorMessage";
 
 export default function ListForm({
   ref,
@@ -12,7 +13,35 @@ export default function ListForm({
   submitType,
 }) {
   const [form, setForm] = useState({ title: "", description: "" });
-  const [errors, setErros] = useState({ title: false, description: false });
+  const [error, setError] = useState({
+    title: { invalid: false, message: null },
+    description: { invalid: false, message: null },
+  });
+
+  function validateInput(key, named, optionsPassed = {}) {
+    const options = {
+      nullable: optionsPassed.nullable ?? false,
+    };
+    let selected = form[key];
+    let invalid = true;
+    let message = null;
+
+    if (selected == null) return;
+
+    let value = selected.trim();
+
+    // If can't be nullable and is null give an error
+    if (value.length == 0 && !options.nullable) {
+      message = `${named} required`;
+    } else if (value.length > 255) {
+      message = `${named} must not exceed 255 characters`;
+    } else {
+      invalid = false;
+    }
+
+    setError((prevError) => ({ ...prevError, [key]: { invalid: invalid, message: message } }));
+    return invalid;
+  }
 
   const mountedRef = useRef(true);
 
@@ -22,31 +51,23 @@ export default function ListForm({
 
   function handleSubmitButton() {
     setRequestStatus("idle");
-    const values = {
-      title: form.title.trim(),
-      description: form.description.trim(),
+
+    setError({
+      title: { invalid: false, message: null },
+      description: { invalid: false, message: null },
+    });
+
+    const invalid = {
+      title: validateInput("title", "Title"),
+      description: validateInput("description", "Description", { nullable: true }),
     };
-    let errorValues = {
-      title: false,
-      description: false,
-    };
-
-    if (values.title == "") {
-      errorValues.title = true;
-    }
-
-    if (values.description == "") {
-      errorValues.description = true;
-    }
-
-    setErros(errorValues);
 
     // If has any validation errors stop here
-    if (errorValues.title || errorValues.description) {
+    if (invalid.title || invalid.description) {
       return;
     }
 
-    onSubmit(values);
+    onSubmit({ title: form.title.trim(), description: form.description.trim() });
   }
 
   useEffect(() => {
@@ -95,16 +116,14 @@ export default function ListForm({
               onChange={(e) => {
                 setForm((prevForm) => ({ ...prevForm, title: e.target.value }));
               }}
-              data-invalid={errors.title}
+              data-invalid={error.title}
             />
-            {errors.title ? <p className="validation_error">Title is required</p> : null}
+
+            <ErrorMessage error={error.title} message={error.title.message} />
           </div>
 
           <div className="dialog_group">
-            <label htmlFor="description">
-              Description
-              <Asterisk size={16} />
-            </label>
+            <label htmlFor="description">Description</label>
             <textarea
               name="description"
               id="description"
@@ -113,11 +132,10 @@ export default function ListForm({
                 setForm((prevForm) => ({ ...prevForm, description: e.target.value }));
               }}
               value={form.description}
-              data-invalid={errors.description}
+              data-invalid={error.description}
             ></textarea>
-            {errors.description ? (
-              <p className="validation_error">Description is required</p>
-            ) : null}
+
+            <ErrorMessage error={error.description} message={error.description.message} />
           </div>
 
           {requestStatus == "error" ? <p className="validation_error">Server error</p> : null}

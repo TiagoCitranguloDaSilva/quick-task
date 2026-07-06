@@ -12,6 +12,12 @@
   box-shadow: 0.125em 0.125em 0.5em hsla(212, 76%, 20%, 0.3);
 }
 
+.list_title,
+.list_description {
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
 .list_title {
   font-family: "Domine";
   font-size: 1.5rem;
@@ -19,8 +25,6 @@
 }
 
 .list_description {
-  white-space: break-spaces;
-  word-break: break-word;
   height: 100%;
 }
 

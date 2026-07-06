@@ -20,6 +20,11 @@
   gap: 0.5em;
 }
 
+.header > * {
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
 .description {
   white-space: break-spaces;
   word-break: break-word;
