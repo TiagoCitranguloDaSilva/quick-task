@@ -9,6 +9,7 @@ export default function CreateItem({ listId, onAdd }) {
   const controllerRef = useRef(new AbortController());
   const [requestStatus, setRequestStatus] = useState("idle");
   const mountedRef = useRef(true);
+  const [error, setError] = useState({ has: false, message: null });
 
   const inputRef = useRef(null);
 
@@ -58,7 +59,19 @@ export default function CreateItem({ listId, onAdd }) {
     const value = content.trim();
 
     // If empty return here
-    if (value == "") return;
+    if (value.length == 0) {
+      setRequestStatus("error");
+      setError({ has: true, message: "Content required" });
+      return;
+    }
+
+    if (value.length > 255) {
+      setRequestStatus("error");
+      setError({ has: true, message: "Content must not exceed 255 characters" });
+      return;
+    }
+
+    setError({ has: false, message: null });
 
     requestCreateItem(value);
   }
@@ -99,7 +112,7 @@ export default function CreateItem({ listId, onAdd }) {
 
       {requestStatus == "error" ? (
         <p className={`error ${styles.error}`}>
-          An error ocurred
+          {error.message ?? "An error ocurred"}
           <CircleX className={styles.error_svg} />
         </p>
       ) : null}

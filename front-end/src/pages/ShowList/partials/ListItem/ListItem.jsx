@@ -15,6 +15,7 @@ export default function ListItem({ currentTask, onDelete }) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [draft, setDraft] = useState(task.content);
+  const [error, setError] = useState({ has: false, message: null });
   const inputRef = useRef(null);
   const editButtonRef = useRef(null);
   const startedEditing = useRef(false);
@@ -126,11 +127,24 @@ export default function ListItem({ currentTask, onDelete }) {
     e?.preventDefault?.();
     e?.stopPropagation?.();
 
+    let draftTrimmed = draft.trim();
+
     // If it's empty just go back
-    if (draft.trim() == "") return;
+    if (draftTrimmed.length == 0) {
+      setIsEditing(false);
+      return;
+    }
+
+    if (draftTrimmed.length > 255) {
+      setRequestStatus("error");
+      setError({ has: true, message: "Content must not exceed 255 characters" });
+      return;
+    }
+
+    setError({ has: false, message: null });
 
     // If the same values as before
-    if (draft.trim() == task.content) {
+    if (draftTrimmed == task.content) {
       // Just go back to normal view mode
       setRequestStatus("idle");
       setIsEditing(false);
@@ -252,7 +266,7 @@ export default function ListItem({ currentTask, onDelete }) {
 
       {requestStatus == "error" ? (
         <p className={`error ${styles.error}`}>
-          An error ocurred
+          {error.message ?? "An error ocurred"}
           <CircleX />
         </p>
       ) : null}

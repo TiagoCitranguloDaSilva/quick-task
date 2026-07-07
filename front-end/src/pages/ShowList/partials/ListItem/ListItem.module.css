@@ -18,25 +18,31 @@
 
 .content,
 .actions {
-  display: flex;
   gap: 0.5em;
   align-items: center;
 }
 
 .content {
-  flex-grow: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
 }
 
 .content :is(span, .content_input) {
   flex-grow: 1;
   padding: 0.25em;
-  white-space: pre;
+
+  white-space: break-spaces;
+  word-break: break-word;
 }
 
 .content_input {
   background-color: transparent;
   border: none;
   outline-offset: 0em;
+}
+
+.actions {
+  display: flex;
 }
 
 .loading {
