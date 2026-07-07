@@ -50,6 +50,12 @@
   background-color: hsl(5, 18%, 88%);
 }
 
+.list_item > p {
+  white-space: break-spaces;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .button_actions,
 .list_hidden,
 .button_actions_buttons {
