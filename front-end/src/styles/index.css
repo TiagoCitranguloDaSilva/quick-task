@@ -1,7 +1,8 @@
-@layer base, layout, components;
+@layer base, layout,  components, dialog;
 
 @import "./variables.css";
 @import "./fonts.css";
 @import "./base.css" layer(base);
 @import "./layout.css" layer(layout);
 @import "./inputs.css" layer(components);
+@import "./dialog.css" layer(dialog);

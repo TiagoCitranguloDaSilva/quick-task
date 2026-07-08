@@ -16,15 +16,29 @@ export default function Register() {
 
   const navigate = useNavigate();
 
+  function validateInput(key, named) {
+    let selected = user[key];
+    let invalid = true;
+    let message = null;
+
+    if (selected == null) return;
+
+    let value = selected.trim();
+
+    if (value.length == 0) {
+      message = `${named} required`;
+    } else if (value.length > 255) {
+      message = `${named} must not exceed 255 characters`;
+    } else {
+      invalid = false;
+    }
+
+    setError((prevError) => ({ ...prevError, [key]: { invalid: invalid, message: message } }));
+    return invalid;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    const invalid = {
-      username: user.username.trim().length == 0,
-      email: user.email.trim().length == 0,
-      password: user.password.trim().length == 0,
-      passwordConfirm: user.password != user.passwordConfirm,
-    };
 
     setError({
       username: { invalid: false, message: null },
@@ -34,17 +48,12 @@ export default function Register() {
       userAlreadyExists: false,
     });
 
-    if (invalid.username) {
-      setError((prevError) => ({ ...prevError, username: { invalid: true, message: null } }));
-    }
-
-    if (invalid.email) {
-      setError((prevError) => ({ ...prevError, email: { invalid: true, message: null } }));
-    }
-
-    if (invalid.password) {
-      setError((prevError) => ({ ...prevError, password: { invalid: true, message: null } }));
-    }
+    const invalid = {
+      username: validateInput("username", "Username"),
+      email: validateInput("email", "Email"),
+      password: validateInput("password", "Password"),
+      passwordConfirm: user.password != user.passwordConfirm,
+    };
 
     if (invalid.passwordConfirm) {
       setError((prevError) => ({ ...prevError, passwordConfirm: true }));
@@ -113,7 +122,7 @@ export default function Register() {
             onChange={handleUsernameInput}
             value={user.username}
           />
-          <ErrorMessage error={error.username} defaultMessage="Username required" />
+          <ErrorMessage error={error.username} message={error.username.message} />
         </div>
 
         <div className="form_group">
@@ -125,7 +134,7 @@ export default function Register() {
             onChange={handleEmailInput}
             value={user.email}
           />
-          <ErrorMessage error={error.email} defaultMessage="Email required" />
+          <ErrorMessage error={error.email} message={error.email.message} />
         </div>
 
         <div className="form_group">
@@ -137,7 +146,7 @@ export default function Register() {
             onChange={handlePasswordInput}
             value={user.password}
           />
-          <ErrorMessage error={error.password} defaultMessage="Password required" />
+          <ErrorMessage error={error.password} message={error.password.message} />
         </div>
 
         <div className="form_group">

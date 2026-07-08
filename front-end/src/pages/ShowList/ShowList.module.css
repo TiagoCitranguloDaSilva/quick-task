@@ -1,0 +1,39 @@
+.back_button {
+  justify-self: start;
+
+  display: flex;
+  gap: 0.25em;
+  align-items: center;
+
+  & > svg {
+    translate: 0;
+    transition: 0.25s ease-out;
+  }
+}
+
+.back_button:is(:hover, :focus) > svg {
+  translate: -0.25em;
+}
+
+.header {
+  display: grid;
+  gap: 0.5em;
+}
+
+.header > * {
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.description {
+  white-space: break-spaces;
+  word-break: break-word;
+
+  border-bottom: 0.125em solid hsl(212, 74%, 88%);
+  padding-bottom: 0.5em;
+}
+
+.tasks {
+  display: grid;
+  padding-bottom: 2em;
+}

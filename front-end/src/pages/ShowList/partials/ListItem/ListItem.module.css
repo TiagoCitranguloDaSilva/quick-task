@@ -1,0 +1,107 @@
+.items {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5em;
+  border-radius: 1em;
+  padding: 0.5em;
+  position: relative;
+}
+
+.items:is(:hover, :has(:focus-visible)) {
+  background-color: hsl(207, 18%, 88%);
+}
+
+.items[data-error="true"] {
+  background-color: hsl(5, 18%, 88%);
+}
+
+.content,
+.actions {
+  gap: 0.5em;
+  align-items: center;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.content :is(span, .content_input) {
+  flex-grow: 1;
+  padding: 0.25em;
+
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.content_input {
+  background-color: transparent;
+  border: none;
+  outline-offset: 0em;
+}
+
+.actions {
+  display: flex;
+}
+
+.loading {
+  animation: 1s loading cubic-bezier(0.5, 0.25, 0.25, 0.8) infinite;
+}
+
+@keyframes loading {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+.error {
+  grid-column: 1/-1;
+  justify-self: end;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.confirm_delete {
+  position: relative;
+
+  filter: saturate(1.25);
+}
+
+@property --position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+
+.confirm_delete::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+
+  background-color: hsla(0, 0%, 0%, 0.35);
+  mix-blend-mode: darken;
+
+  mask-image: conic-gradient(
+    from 0deg at 50% 50%,
+    black var(--position),
+    transparent var(--position)
+  );
+
+  animation: 3s confirm_deletion linear forwards;
+}
+
+@keyframes confirm_deletion {
+  0% {
+    --position: 100%;
+  }
+  100% {
+    --position: 0%;
+  }
+}

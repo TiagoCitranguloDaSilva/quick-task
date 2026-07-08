@@ -1,0 +1,96 @@
+.list {
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  align-items: end;
+  gap: 0.5em;
+  padding: 1em;
+  border-radius: 1em;
+  overflow: hidden;
+
+  border: 0.125em solid hsl(212, 74%, 88%);
+  background-color: hsl(213, 65%, 97%);
+  box-shadow: 0.125em 0.125em 0.5em hsla(212, 76%, 20%, 0.3);
+}
+
+.list_title,
+.list_description {
+  white-space: break-spaces;
+  word-break: break-word;
+}
+
+.list_title {
+  font-family: "Domine";
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.list_description {
+  height: 100%;
+}
+
+.list_items {
+  display: grid;
+  gap: 0.25em;
+}
+
+.list_items[data-has-tasks="true"],
+.button_actions {
+  border-top: 0.125em solid hsl(212, 74%, 88%);
+  padding-top: 0.5em;
+}
+
+.list_item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.list_item[data-error="true"] {
+  background-color: hsl(5, 18%, 88%);
+}
+
+.list_item > p {
+  white-space: break-spaces;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.button_actions,
+.list_hidden,
+.button_actions_buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.button_actions {
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.button_actions_buttons {
+  justify-content: end;
+  opacity: 0;
+  transition: 0.25s 0.125s;
+  margin-left: auto;
+}
+
+.list:is(:hover, :has(:focus-visible)) .button_actions_buttons {
+  opacity: 1;
+  transition: 0.25s;
+  translate: 0 0%;
+}
+
+.error {
+  margin-top: 0.5em;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+
+  background-color: hsl(5, 18%, 88%);
+
+  padding: 0.5em;
+  border-radius: 0.5em;
+}

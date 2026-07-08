@@ -29,6 +29,20 @@ button,
   }
 }
 
+:is(button, .button).destructive {
+  background-color: hsl(4, 83%, 40%);
+  color: hsl(0, 0%, 100%);
+
+  &:hover {
+    background-color: hsl(4, 76%, 59%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(4, 80%, 31%);
+  }
+}
+
+textarea,
 input,
 .input {
   padding: 0.25em 0.5em;
@@ -44,4 +58,85 @@ input,
   &:focus {
     background-color: hsl(207, 33%, 95%);
   }
+}
+
+:is(textarea, input)[data-invalid="true"] {
+  border-color: hsl(0, 83%, 35%);
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  position: relative;
+
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+
+  background-color: hsl(210, 29%, 95%);
+  border: solid 0.125em hsl(208, 67%, 55%);
+  border-radius: 0.5em;
+  cursor: pointer;
+
+  &:hover {
+    background-color: hsl(209, 58%, 87%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(203, 46%, 78%);
+  }
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  /* 
+   * "Check" icon by Lucid Icons
+   * https://lucide.dev/icons/check
+  */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZWNrLWljb24gbHVjaWRlLWNoZWNrIj48cGF0aCBkPSJNMjAgNiA5IDE3bC01LTUiLz48L3N2Zz4=");
+  background-size: 100% 100%;
+
+  transition: 0.25s ease-out;
+  /* clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%); */
+  clip-path: circle(0% at 0% 50%);
+}
+
+input[type="checkbox"]:checked::before {
+  /* clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); */
+  clip-path: circle(150% at 0% 50%);
+}
+
+input[type="checkbox"]:checked {
+  background-color: hsl(92, 54%, 85%);
+  border-color: hsl(92, 48%, 50%);
+
+  &:hover {
+    background-color: hsl(92, 61%, 80%);
+  }
+
+  &:is(:active, :focus-visible) {
+    background-color: hsl(92, 70%, 75%);
+  }
+}
+
+.square {
+  width: 2em;
+  height: 2em;
+  padding: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.validation_error,
+.error {
+  color: hsl(0, 83%, 35%);
+}
+
+.lucide-asterisk {
+  stroke: hsl(0, 83%, 35%);
 }
