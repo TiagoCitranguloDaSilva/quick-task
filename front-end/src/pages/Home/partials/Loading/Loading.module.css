@@ -1,0 +1,30 @@
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.loading p {
+  animation: 3s loading ease-out infinite;
+  mask-image: linear-gradient(
+    135deg,
+    hsla(0, 0%, 0%, 1) 0%,
+    hsla(0, 0%, 0%, 1) 50%,
+    hsla(0, 0%, 100%, 0) 70%,
+    hsla(0, 0%, 0%, 1) 90%
+  );
+
+  mask-size: 200%;
+}
+
+@keyframes loading {
+  0% {
+    mask-position: 200%;
+  }
+  50%,
+  100% {
+    mask-position: 0%;
+  }
+}

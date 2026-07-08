@@ -1,0 +1,42 @@
+.add_div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5em;
+  border-radius: 1em;
+  padding: 0.5em;
+}
+
+.add_div[data-error="true"] {
+  background-color: hsl(5, 18%, 88%);
+}
+
+.add_input {
+  min-width: 0;
+}
+
+.loading {
+  animation: 1s loading cubic-bezier(0.5, 0.25, 0.25, 0.8) infinite;
+}
+
+@keyframes loading {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
+
+.error {
+  grid-column: 1/-1;
+  justify-self: end;
+
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+}
+
+.error_svg {
+  margin-right: 0.25em;
+}

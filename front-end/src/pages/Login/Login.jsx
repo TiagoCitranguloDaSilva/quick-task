@@ -14,13 +14,29 @@ function Login() {
   });
   const navigate = useNavigate();
 
+  function validateInput(key, named) {
+    let selected = user[key];
+    let invalid = true;
+    let message = null;
+
+    if (selected == null) return;
+
+    let value = selected.trim();
+
+    if (value.length == 0) {
+      message = `${named} required`;
+    } else if (value.length > 255) {
+      message = `${named} must not exceed 255 characters`;
+    } else {
+      invalid = false;
+    }
+
+    setError((prevError) => ({ ...prevError, [key]: { invalid: invalid, message: message } }));
+    return invalid;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    const invalid = {
-      email: user.email.trim().length == 0,
-      password: user.password.trim().length == 0,
-    };
 
     setError({
       email: { invalid: false, message: null },
@@ -28,13 +44,10 @@ function Login() {
       incorrectCredentials: false,
     });
 
-    if (invalid.email) {
-      setError((prevError) => ({ ...prevError, email: { invalid: true, message: null } }));
-    }
-
-    if (invalid.password) {
-      setError((prevError) => ({ ...prevError, password: { invalid: true, message: null } }));
-    }
+    const invalid = {
+      email: validateInput("email", "Email"),
+      password: validateInput("password", "Password"),
+    };
 
     // At least one is invalid, don't try to fetch yet
     if (invalid.email || invalid.password) {
@@ -58,8 +71,8 @@ function Login() {
         setError((prevError) => ({ ...prevError, ...updateInvalids }));
       }
 
-      //Incorrect credentials
-      if (response.status == 401) {
+      // Incorrect credentials
+      if (response.status == 403) {
         setError((prevError) => ({ ...prevError, incorrectCredentials: true }));
       }
 
