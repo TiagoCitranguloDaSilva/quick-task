@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: Quick Task
+
+  datasource:
+
+    # Database url 
+    url: "jdbc:mysql://localhost:3306/quick_task_db"
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
+
+    # Database username
+    username: "root"
+
+    # Database password
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+springdoc:
+  swagger-ui:
+
+    # Swagger path (It must be used just in test or development, for production, it must be deactivated)
+    path: /swagger-ui.html
+
+api:
+  security:
+    token:
+
+      # Secret string for authentication
+      secret: "secret"
