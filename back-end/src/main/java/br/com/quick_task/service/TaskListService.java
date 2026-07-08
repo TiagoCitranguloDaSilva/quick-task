@@ -1,18 +1,20 @@
 package br.com.quick_task.service;
 
+import br.com.quick_task.exception.NotOwnerException;
+import br.com.quick_task.exception.TaskListNotFoundException;
+import br.com.quick_task.exception.UserNotFoundException;
 import br.com.quick_task.model.TaskList;
 import br.com.quick_task.model.User;
 import br.com.quick_task.repository.TaskListRepository;
 import br.com.quick_task.repository.UserRepository;
 import br.com.quick_task.request.TaskList.TaskListPostRequestBody;
 import br.com.quick_task.request.TaskList.TaskListPutRequestBody;
-import br.com.quick_task.response.List.TaskResponseBody;
+import br.com.quick_task.response.Task.TaskResponseBody;
 import br.com.quick_task.response.TaskList.TaskListResponseBody;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TaskListService {
@@ -28,6 +30,9 @@ public class TaskListService {
 
     public List<TaskListResponseBody> findAllLists(Long id) {
 
+        userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
         List<TaskListResponseBody> list = new ArrayList<>();
 
         taskListRepository.findByUserId(id).forEach(taskList -> {
@@ -37,18 +42,16 @@ public class TaskListService {
         return list;
     }
 
-    public TaskListResponseBody createList(TaskListPostRequestBody request) {
+    public TaskListResponseBody createList(TaskListPostRequestBody request, Long userId) {
 
-        Optional<User> user = userRepository.findById(request.getUserId());
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (user.isEmpty()) {
-            return null;
-        }
 
         TaskList taskList = TaskList.builder()
                 .title(request.getTitle())
                 .description(request.getDescription())
-                .user(user.get())
+                .user(user)
                 .tasks(new ArrayList<>())
                 .build();
 
@@ -59,60 +62,52 @@ public class TaskListService {
 
     public TaskListResponseBody findById(Long taskId, Long userId) {
 
-        Optional<TaskList> list = taskListRepository.findById(taskId);
+        TaskList list = taskListRepository.findById(taskId)
+                .orElseThrow(() -> new TaskListNotFoundException(taskId));
 
-        if (list.isEmpty()) {
-            return null;
-        }
 
-        if (!list.get().getUser().getId().equals(userId)) {
-            return null;
-        }
+        if (!list.getUser().getId().equals(userId))
+            throw new NotOwnerException(list);
 
-        return convertToDTO(list.get());
+        return convertToDTO(list);
 
     }
 
-    public TaskListResponseBody update(TaskListPutRequestBody request) {
+    public TaskListResponseBody update(TaskListPutRequestBody request, Long userId) {
 
-        Optional<TaskList> list = taskListRepository.findById(request.getId());
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (list.isEmpty()) {
-            return null;
-        }
+        TaskList list = taskListRepository.findById(request.getId())
+                .orElseThrow(() -> new TaskListNotFoundException(request.getId()));
 
-        if (!list.get().getUser().getId().equals(request.getUserId())) {
-            return null;
-        }
+        if (!list.getUser().getId().equals(userId))
+            throw new NotOwnerException(list);
 
-        list.get().setTitle(request.getTitle());
-        list.get().setDescription(request.getDescription());
+        list.setTitle(request.getTitle());
+        list.setDescription(request.getDescription());
 
-        taskListRepository.save(list.get());
+        taskListRepository.save(list);
 
-        return convertToDTO(list.get());
+        return convertToDTO(list);
 
     }
 
     public void delete(Long taskListId, Long userId) {
 
-        Optional<TaskList> list = taskListRepository.findById(taskListId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (list.isEmpty()) {
-            return;
-        }
+        TaskList list = taskListRepository.findById(taskListId)
+                .orElseThrow(() -> new TaskListNotFoundException(taskListId));
 
-        if (!list.get().getUser().getId().equals(userId)) {
-            return;
-        }
 
-        Optional<User> user = userRepository.findById(userId);
+        if (!list.getUser().getId().equals(userId))
+            throw new NotOwnerException(list);
 
-        if (user.isEmpty()) return;
+        user.getLists().remove(list);
 
-        user.get().getLists().remove(list.get());
-
-        taskListRepository.delete(list.get());
+        taskListRepository.delete(list);
 
     }
 
@@ -126,6 +121,7 @@ public class TaskListService {
                         .id(task.getId())
                         .content(task.getContent())
                         .listId(task.getList().getId())
+                        .done(task.isDone())
                         .build());
             });
         }

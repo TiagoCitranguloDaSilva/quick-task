@@ -1,13 +1,18 @@
 package br.com.quick_task.controller;
 
+import br.com.quick_task.exception.InvalidCredentialsException;
 import br.com.quick_task.model.User;
 import br.com.quick_task.request.Auth.AuthLoginRequestBody;
 import br.com.quick_task.request.Auth.AuthRegisterRequestBody;
-import br.com.quick_task.service.AuthService;
+import br.com.quick_task.service.TokenService;
 import br.com.quick_task.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,19 +24,19 @@ public class AuthController {
 
     private final UserService userService;
 
-    private final AuthService authService;
+    private final TokenService tokenService;
 
-    public AuthController(UserService userService, AuthService authService) {
+    private final AuthenticationManager authenticationManager;
+
+    public AuthController(UserService userService, TokenService tokenService, AuthenticationManager authenticationManager) {
         this.userService = userService;
-        this.authService = authService;
+        this.tokenService = tokenService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> createNewUser(@RequestBody @Valid AuthRegisterRequestBody request) {
-        User user = userService.createNewUser(request);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
-        }
+        userService.createNewUser(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("User created");
 
@@ -40,13 +45,18 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid AuthLoginRequestBody request) {
 
-        User user = authService.validateLogin(request);
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getPassword()
+        );
 
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect credentials");
+        try {
+            Authentication auth = authenticationManager.authenticate(usernamePassword);
+            String token = tokenService.generateToken((User) auth.getPrincipal());
+            return ResponseEntity.ok("Bearer " + token);
+        } catch (AuthenticationException e) {
+            throw new InvalidCredentialsException();
         }
-
-        return ResponseEntity.ok("JWT Token Mock");
 
     }
 

@@ -1,6 +1,6 @@
 package br.com.quick_task.response.TaskList;
 
-import br.com.quick_task.response.List.TaskResponseBody;
+import br.com.quick_task.response.Task.TaskResponseBody;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
