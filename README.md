@@ -32,7 +32,7 @@ A full-stack task management application that allows users to create accounts, m
 
 - **back-end/**
   - Back End part of project, API and Server Side logic
-  - [**README.md** (See about tech stack and how to launch Back End part)](front-end/README.md)
+  - [**README.md** (See about tech stack and how to launch Back End part)](back-end/README.md)
 - **front-end/**
   - Front End part of project, UI and Client Side app
   - [**README.md** (See about tech stack and how to launch Front End part)](front-end/README.md)
@@ -42,7 +42,7 @@ A full-stack task management application that allows users to create accounts, m
 > [!NOTE]  
 > This project is divided into two independent applications
 
-1. Start the backend by following the instructions in [`back-end/README.md`](front-end/README.md)
+1. Start the backend by following the instructions in [`back-end/README.md`](back-end/README.md)
 2. Start the frontend by following the instructions in [`front-end/README.md`](front-end/README.md)
 3. Open http://localhost:5173/ in your browser
 4. Create an account and start managing your tasks.
