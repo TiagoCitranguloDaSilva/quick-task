@@ -9,6 +9,7 @@
 }
 
 .header {
+  z-index: 10;
   position: sticky;
   padding: 0.5em;
   top: 0;
