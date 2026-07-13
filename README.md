@@ -28,6 +28,12 @@ A full-stack task management application that allows users to create accounts, m
 
 ## Screenshots
 
+![Register screen](front-end/public/docs/1_register.png)
+![Login screen](front-end/public/docs/2_login.png)
+![No lists yet screen](front-end/public/docs/3_nolists.png)
+![Home, shown all lists screen](front-end/public/docs/4_home.png)
+![Selected list screen](front-end/public/docs/5_selected_list.png)
+
 ## Repository structure
 
 - **back-end/**
