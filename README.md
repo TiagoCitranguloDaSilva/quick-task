@@ -2,7 +2,7 @@
 
 [![Java, Spring, React, JavaScript, HTML, CSS, MySQL, Figma](https://skillicons.dev/icons?i=java,spring,mysql,react,js,html,css)](https://skillicons.dev)
 
-A full-stack task management application that allows users to create accounts, manage multiple lists, and add items on each list. Users can mark items ar completed or incomplete, as well of editing and deleting both lists and tasks.
+A full-stack task management application that allows users to create accounts, manage multiple lists, and add items on each list. Users can mark items as completed or incomplete, as well of editing and deleting both lists and tasks.
 
 ## Contents
 
