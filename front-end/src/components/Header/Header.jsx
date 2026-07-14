@@ -1,7 +1,7 @@
-import { Link, NavLink, useNavigate } from "react-router";
-import styles from "./Header.module.css";
 import { useContext, useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);

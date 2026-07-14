@@ -1,8 +1,8 @@
+import { CircleX, Ellipsis, SquarePen, Trash } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router";
 import styles from "./List.module.css";
-import { CircleX, Ellipsis, SquarePen, Trash } from "lucide-react";
 import Item from "./partials/Item/Item";
-import { useState } from "react";
 
 export default function List({ list, openEditList, openDeleteList }) {
   const [requestStatus, setRequestStatus] = useState("idle");
