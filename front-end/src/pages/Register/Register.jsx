@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
 import ErrorMessage from "../../components/ErrorMessage";
+import { AuthContext } from "../../contexts/AuthContext";
 
 export default function Register() {
   const { register } = useContext(AuthContext);
@@ -12,6 +12,7 @@ export default function Register() {
     password: { invalid: false, message: null },
     passwordConfirm: "",
     userAlreadyExists: false,
+    serverError: false,
   });
 
   const navigate = useNavigate();
@@ -46,6 +47,7 @@ export default function Register() {
       password: { invalid: false, message: null },
       passwordConfirm: false,
       userAlreadyExists: false,
+      serverError: false,
     });
 
     const invalid = {
@@ -85,6 +87,11 @@ export default function Register() {
       // User exists
       if (response.status == 409) {
         setError((prevError) => ({ ...prevError, userAlreadyExists: true }));
+      }
+
+      // Service Unavailable, backend server is not accessible
+      if (response.status == 503) {
+        setError((prevError) => ({ ...prevError, serverError: true }));
       }
 
       return;
@@ -162,6 +169,11 @@ export default function Register() {
         </div>
 
         <ErrorMessage error={error.userAlreadyExists} message="User already exists" />
+
+        <ErrorMessage
+          error={error.serverError}
+          message="Server temporarily unavailable. Please try again later"
+        />
 
         <button>Sign up</button>
       </form>

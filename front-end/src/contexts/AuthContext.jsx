@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { useLocation, useNavigate, Navigate, Outlet } from "react-router";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router";
 
 const AuthContext = createContext();
 
@@ -51,13 +51,22 @@ function AuthProvider({ children }) {
   }, [location.pathname, navigate, accessToken]);
 
   async function login({ email, password }) {
-    const response = await fetch("http://localhost:8080/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+    } catch (e) {
+      console.error(`An error occurred while trying to access server`, e);
+      return {
+        success: false,
+        status: 503,
+        message: "Server unavailable. Request failed.",
+      };
+    }
 
     // If response is an error, other than 200's codes
     if (!response.ok) {
@@ -99,13 +108,22 @@ function AuthProvider({ children }) {
   }
 
   async function register({ username, email, password }) {
-    const response = await fetch("http://localhost:8080/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password }),
-    });
+    try {
+      const response = await fetch("http://localhost:8080/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+    } catch (e) {
+      console.error(`An error occurred while trying to access server`, e);
+      return {
+        success: false,
+        status: 503,
+        message: "Server unavailable. Request failed.",
+      };
+    }
 
     // If response is an error, other than 200's codes
     if (!response.ok) {

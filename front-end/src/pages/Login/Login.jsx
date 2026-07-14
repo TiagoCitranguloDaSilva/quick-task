@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import ErrorMessage from "../../components/ErrorMessage";
 
@@ -11,6 +11,7 @@ function Login() {
     email: { invalid: false, message: null },
     password: { invalid: false, message: null },
     incorrectCredentials: false,
+    serverError: false,
   });
   const navigate = useNavigate();
 
@@ -42,6 +43,7 @@ function Login() {
       email: { invalid: false, message: null },
       password: { invalid: false, message: null },
       incorrectCredentials: false,
+      serverError: false,
     });
 
     const invalid = {
@@ -59,6 +61,8 @@ function Login() {
       password: user.password,
     });
 
+    console.log(response);
+
     // If unsuccessful
     if (!response.success) {
       // Validation error
@@ -74,6 +78,11 @@ function Login() {
       // Incorrect credentials
       if (response.status == 403) {
         setError((prevError) => ({ ...prevError, incorrectCredentials: true }));
+      }
+
+      // Service Unavailable, backend server is not accessible
+      if (response.status == 503) {
+        setError((prevError) => ({ ...prevError, serverError: true }));
       }
 
       return;
@@ -120,8 +129,13 @@ function Login() {
 
         <ErrorMessage error={error.incorrectCredentials} message="Incorrect credentials" />
 
+        <ErrorMessage
+          error={error.serverError}
+          message="Server temporarily unavailable. Please try again later"
+        />
+
         <button>Log in</button>
-      </form>{" "}
+      </form>
       <p>
         Don't have an account? <Link to="/register">Sign up</Link>
       </p>
