@@ -59,18 +59,19 @@ function AuthProvider({ children }) {
         },
         body: JSON.stringify({ email, password }),
       });
-    } catch (e) {
-      console.error(`An error occurred while trying to access server`, e);
-      return {
-        success: false,
-        status: 503,
-        message: "Server unavailable. Request failed.",
-      };
-    }
 
-    // If response is an error, other than 200's codes
-    if (!response.ok) {
+      // If the response is all good
+      if (response.ok) {
+        const token = await response.text();
+        setAccessToken(token);
+        return { success: true };
+      }
+
+      // If response is not ok
+
       if (response.status == 400) {
+        // Validation errors
+
         const content = await response.json();
 
         let userInvalid = [];
@@ -90,6 +91,8 @@ function AuthProvider({ children }) {
       }
 
       if (response.status == 403) {
+        // Server detected a conflict
+
         const message = await response.text();
 
         return {
@@ -100,11 +103,14 @@ function AuthProvider({ children }) {
       }
 
       throw new Error("Register failed");
+    } catch (e) {
+      console.error(`An error occurred while trying to access server`, e);
+      return {
+        success: false,
+        status: 503,
+        message: "Server unavailable. Request failed.",
+      };
     }
-
-    const token = await response.text();
-    setAccessToken(token);
-    return { success: true };
   }
 
   async function register({ username, email, password }) {
@@ -116,18 +122,17 @@ function AuthProvider({ children }) {
         },
         body: JSON.stringify({ username, email, password }),
       });
-    } catch (e) {
-      console.error(`An error occurred while trying to access server`, e);
-      return {
-        success: false,
-        status: 503,
-        message: "Server unavailable. Request failed.",
-      };
-    }
 
-    // If response is an error, other than 200's codes
-    if (!response.ok) {
+      // If the response is all good
+      if (response.ok) {
+        return { success: true };
+      }
+
+      // If response is not ok
+
       if (response.status == 400) {
+        // Validation errors
+
         const content = await response.json();
 
         let userInvalid = [];
@@ -145,6 +150,8 @@ function AuthProvider({ children }) {
           invalids: userInvalid,
         };
       } else if (response.status == 409) {
+        // Server detected a conflict
+
         const message = await response.text();
 
         return {
@@ -155,9 +162,14 @@ function AuthProvider({ children }) {
       }
 
       throw new Error("Register failed");
+    } catch (e) {
+      console.error(`An error occurred while trying to access server`, e);
+      return {
+        success: false,
+        status: 503,
+        message: "Server unavailable. Request failed.",
+      };
     }
-
-    return { success: true };
   }
 
   function logout() {
