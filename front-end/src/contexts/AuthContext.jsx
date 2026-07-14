@@ -52,7 +52,7 @@ function AuthProvider({ children }) {
 
   async function login({ email, password }) {
     try {
-      const response = await fetch("http://localhost:8080/auth/login", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_SERVER_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -115,7 +115,7 @@ function AuthProvider({ children }) {
 
   async function register({ username, email, password }) {
     try {
-      const response = await fetch("http://localhost:8080/auth/register", {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_SERVER_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

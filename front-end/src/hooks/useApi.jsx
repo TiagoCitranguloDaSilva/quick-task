@@ -19,7 +19,7 @@ export default function useApi() {
       // If has a token, pass it
       if (accessToken) options.headers.Authorization = `Bearer ${accessToken}`;
 
-      const response = await fetch(url, options);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_SERVER_URL}${url}`, options);
 
       if (response.status == 401) {
         // token invalid or expired, need to re login

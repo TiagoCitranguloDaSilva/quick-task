@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import useApi from "../../../../hooks/useApi";
 import ListForm from "../../../../components/ListForm/ListForm";
+import useApi from "../../../../hooks/useApi";
 
 export default function CreateNewList({ ref, updateLists }) {
   const { fetchWithAuth } = useApi();
@@ -11,7 +11,7 @@ export default function CreateNewList({ ref, updateLists }) {
   const requestCreateList = useCallback(async (data) => {
     setRequestStatus("idle");
     try {
-      const response = await fetchWithAuth("http://localhost:8080/list/create", {
+      const response = await fetchWithAuth("/list/create", {
         method: "POST",
         body: JSON.stringify({
           title: data.title,

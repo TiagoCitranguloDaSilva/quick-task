@@ -1,5 +1,5 @@
-import useApi from "../../../../../../hooks/useApi";
 import { useCallback, useEffect, useRef, useState } from "react";
+import useApi from "../../../../../../hooks/useApi";
 
 export default function Item({ className, inputId, task, setRequestStatus }) {
   const { fetchWithAuth } = useApi();
@@ -24,7 +24,7 @@ export default function Item({ className, inputId, task, setRequestStatus }) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       try {
-        const response = await fetchWithAuth("http://localhost:8080/task/edit", {
+        const response = await fetchWithAuth("/task/edit", {
           method: "PUT",
           body: JSON.stringify(data),
           signal: controllerRef.current.signal,

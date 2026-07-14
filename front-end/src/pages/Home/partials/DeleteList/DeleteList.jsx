@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "./DeleteList.module.css";
 import { Trash2, TriangleAlert, X } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../../../hooks/useApi";
+import styles from "./DeleteList.module.css";
 
 export default function DeleteList({ ref, updateLists, currentListEditing }) {
   const { fetchWithAuth } = useApi();
@@ -18,13 +18,10 @@ export default function DeleteList({ ref, updateLists, currentListEditing }) {
     setRequestStatus("idle");
 
     try {
-      const response = await fetchWithAuth(
-        `http://localhost:8080/list/delete/${currentListEditing.id}`,
-        {
-          method: "DELETE",
-          signal: controllerRef.current.signal,
-        },
-      );
+      const response = await fetchWithAuth(`/list/delete/${currentListEditing.id}`, {
+        method: "DELETE",
+        signal: controllerRef.current.signal,
+      });
 
       if (!response.ok) {
         setRequestStatus("error");

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "./ListItem.module.css";
 import { CircleX, LoaderCircle, Pen, Save, Trash } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../../../hooks/useApi";
+import styles from "./ListItem.module.css";
 
 export default function ListItem({ currentTask, onDelete }) {
   const { fetchWithAuth } = useApi();
@@ -41,7 +41,7 @@ export default function ListItem({ currentTask, onDelete }) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       try {
-        const response = await fetchWithAuth("http://localhost:8080/task/edit", {
+        const response = await fetchWithAuth("/task/edit", {
           method: "PUT",
           body: JSON.stringify(data),
           signal: controllerRef.current.signal,
@@ -70,7 +70,7 @@ export default function ListItem({ currentTask, onDelete }) {
     setRequestStatus("loading");
 
     try {
-      const response = await fetchWithAuth(`http://localhost:8080/task/delete/${currentTask.id}`, {
+      const response = await fetchWithAuth(`/task/delete/${currentTask.id}`, {
         method: "DELETE",
         signal: controllerRef.current.signal,
       });

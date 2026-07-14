@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../hooks/useApi";
-import Error from "./partials/Error/Error";
-import List from "./partials/List/List";
 import styles from "./Home.module.css";
-import Loading from "./partials/Loading/Loading";
-import NoListFound from "./partials/NoListFound/NoListFound";
 import AddButton from "./partials/AddButton/AddButton";
 import CreateNewList from "./partials/CreateNewList/CreateNewList";
-import EditList from "./partials/EditList/EditList";
 import DeleteList from "./partials/DeleteList/DeleteList";
+import EditList from "./partials/EditList/EditList";
+import Error from "./partials/Error/Error";
+import List from "./partials/List/List";
+import Loading from "./partials/Loading/Loading";
+import NoListFound from "./partials/NoListFound/NoListFound";
 
 export default function Home() {
   const { fetchWithAuth } = useApi();
@@ -29,7 +29,7 @@ export default function Home() {
     setHasError(false);
 
     try {
-      const response = await fetchWithAuth("http://localhost:8080/list/all", {
+      const response = await fetchWithAuth("/list/all", {
         signal: controllerRef.current.signal,
       });
       if (!response.ok) {

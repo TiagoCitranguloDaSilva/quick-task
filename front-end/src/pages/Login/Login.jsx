@@ -61,8 +61,6 @@ function Login() {
       password: user.password,
     });
 
-    console.log(response);
-
     // If unsuccessful
     if (!response.success) {
       // Validation error

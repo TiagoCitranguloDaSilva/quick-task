@@ -1,13 +1,13 @@
-import { Link, useParams } from "react-router";
-import styles from "./ShowList.module.css";
-import useApi from "../../hooks/useApi";
-import { useCallback, useEffect, useRef, useState } from "react";
-import NotFoundPage from "../NotFoundPage/NotFoundPage";
-import Error from "./partials/Error/Error";
-import Loading from "./partials/Loading/Loading";
 import { ChevronLeft } from "lucide-react";
-import ListItem from "./partials/ListItem/ListItem";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router";
+import useApi from "../../hooks/useApi";
+import NotFoundPage from "../NotFoundPage/NotFoundPage";
 import CreateItem from "./partials/CreateItem/CreateItem";
+import Error from "./partials/Error/Error";
+import ListItem from "./partials/ListItem/ListItem";
+import Loading from "./partials/Loading/Loading";
+import styles from "./ShowList.module.css";
 
 export default function ShowList() {
   const { id } = useParams();
@@ -39,7 +39,7 @@ export default function ShowList() {
     setHasError(false);
 
     try {
-      const response = await fetchWithAuth(`http://localhost:8080/list/${id}`, {
+      const response = await fetchWithAuth(`/list/${id}`, {
         signal: controllerRef.current.signal,
       });
       if (!response.ok) {

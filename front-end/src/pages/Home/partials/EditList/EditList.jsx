@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import useApi from "../../../../hooks/useApi";
 import ListForm from "../../../../components/ListForm/ListForm";
+import useApi from "../../../../hooks/useApi";
 
 export default function EditList({ ref, updateLists, currentListEditing }) {
   const { fetchWithAuth } = useApi();
@@ -22,7 +22,7 @@ export default function EditList({ ref, updateLists, currentListEditing }) {
     }
 
     try {
-      const response = await fetchWithAuth("http://localhost:8080/list/edit", {
+      const response = await fetchWithAuth("/list/edit", {
         method: "PUT",
         body: JSON.stringify({
           id: currentListEditing.id,

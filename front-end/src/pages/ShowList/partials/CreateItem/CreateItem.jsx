@@ -1,7 +1,7 @@
-import { Plus, LoaderCircle, CircleX } from "lucide-react";
+import { CircleX, LoaderCircle, Plus } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import styles from "./CreateItem.module.css";
 import useApi from "../../../../hooks/useApi";
+import styles from "./CreateItem.module.css";
 
 export default function CreateItem({ listId, onAdd }) {
   const { fetchWithAuth } = useApi();
@@ -21,7 +21,7 @@ export default function CreateItem({ listId, onAdd }) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
-      const response = await fetchWithAuth("http://localhost:8080/task/create", {
+      const response = await fetchWithAuth("/task/create", {
         method: "POST",
         body: JSON.stringify({
           content: value,
