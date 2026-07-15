@@ -60,6 +60,11 @@ node -v
 npm -v
 ```
 
+### Setup environment file
+
+- Go to to the folder `./front-end/`
+- Duplicate `.env.local.example` and rename to `.env.local`
+
 ## Running the Application
 
 ### Install Dependencies
